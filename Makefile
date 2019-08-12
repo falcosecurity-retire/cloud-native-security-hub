@@ -1,2 +1,5 @@
-sync:
-	gsutil rsync -r -x ".git|LICENSE|Makefile|README.md" . gs://cloud-native-visibility-hub-resources
+build:
+	docker build -t gcr.io/mateo-burillo-ns/cnvh-resources .
+
+push: build
+	docker push gcr.io/mateo-burillo-ns/cnvh-resources
