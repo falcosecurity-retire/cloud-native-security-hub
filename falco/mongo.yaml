@@ -1,0 +1,71 @@
+---
+apiVersion: v1
+kind: FalcoRules
+vendor: Mongo
+name: MongoDB
+description: |
+  # MongoDB Falco Rules
+  MongoDB is a free and open-source cross-platform document-oriented database program.
+  Classified as a NoSQL database program, MongoDB uses JSON-like documents with schemas.
+  MongoDB is developed by MongoDB Inc., and is published under a combination of the GNU
+  Affero General Public License and the Apache
+
+  ## Rules
+
+  ### Unexpected inbound tcp connection mongo
+
+  Detects an inbound network connection to mongo on an unexpected port
+
+  ### Unexpected spawned process mongo
+
+  Detects an unexpected process spawned in the mongo container
+
+  ### Unexpected file access readwrite for mongo
+
+  Detects an unexpected file accessed in readwrite mode for mongo
+keywords:
+  - database
+icon: https://upload.wikimedia.org/wikipedia/en/thumb/4/45/MongoDB-Logo.svg/2560px-MongoDB-Logo.svg.png
+maintainers:
+  - name: nestorsalceda
+    email: nestor.salceda@sysdig.com
+  - name: fedebarcelona
+    email: fede.barcelona@sysdig.com
+rules:
+  - raw: |
+      - macro: mongo_consider_syscalls
+        condition: (evt.num < 0)
+
+      - macro: app_mongo
+        condition: container and container.image contains "mongo"
+
+      # Restricting listening ports to selected set
+
+      - list: mongo_allowed_inbound_ports_tcp
+        items: [27017]
+
+      - rule: Unexpected inbound tcp connection mongo
+        desc: Detect inbound traffic to mongo using tcp on a port outside of expected set
+        condition: inbound and evt.rawres >= 0 and not fd.sport in (mongo_allowed_inbound_ports_tcp) and app_mongo and fd.sockfamily = ip
+        output: Inbound network connection to mongo on unexpected port (command=%proc.cmdline pid=%proc.pid connection=%fd.name sport=%fd.sport user=%user.name %container.info image=%container.image)
+        priority: NOTICE
+
+      # Restricting spawned processes to selected set
+
+      - list: mongo_allowed_processes
+        items: ["mongod", "mongo", "ftdc", "WTCheck.tThread" ,"app-entrypoint.", "basename", "dirname", "getent", "gosu", "grep", "groupadd", "nami", "node", "run.sh", "sed", "sh", "sleep", "tini", "useradd", "which"]
+
+      - rule: Unexpected spawned process mongo
+        desc: Detect a process started in a mongo container outside of an expected set
+        condition: spawned_process and not proc.name in (mongo_allowed_processes) and app_mongo
+        output: Unexpected process spawned in mongo container (command=%proc.cmdline pid=%proc.pid user=%user.name %container.info image=%container.image)
+        priority: NOTICE
+
+      - list: mongo_allowed_file_prefixes_readwrite
+        items: ["/data/db", "/etc", "/opt", "/tmp", "/root/.nami"]
+
+      - rule: Unexpected file access readwrite for mongo
+        desc: Detect an attempt to access a file readwrite other than below an expected list of directories
+        condition: (open_write) and not fd.name pmatch (mongo_allowed_file_prefixes_readwrite) and app_mongo
+        output: Unexpected file accessed readwrite for mongo (command=%proc.cmdline pid=%proc.pid file=%fd.name %container.info image=%container.image)
+        priority: NOTICE
