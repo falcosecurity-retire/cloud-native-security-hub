@@ -1,0 +1,8 @@
+---
+apiVersion: v1
+kind: Vendor
+name: Apache
+description: |
+  # Apache Software Foundation
+icon: https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Apache_Software_Foundation_Logo_%282016%29.svg/2560px-Apache_Software_Foundation_Logo_%282016%29.svg.png
+website: https://apache.org/
