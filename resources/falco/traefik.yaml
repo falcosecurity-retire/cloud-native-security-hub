@@ -1,0 +1,56 @@
+---
+apiVersion: v1
+kind: FalcoRules
+vendor: Traefik
+name: Traefik
+description: |
+  # Traefik Falco Rules
+
+  A reverse proxy / load balancer that's easy, dynamic, automatic, fast, full-featured, open source, production proven, provides metrics, and integrates with every major cluster technology... No wonder it's so popular!
+
+  ## Rules
+
+  ### Unauthorized inbound tcp connection etcd
+
+  Detects inbound network connections to etcd on unexpected ports
+
+  ### Unexpected spawned process etcd
+
+  Detects an unexpected process spawned in the etcd container
+keywords:
+  - loadbalancer
+icon: https://d33wubrfki0l68.cloudfront.net/1b8ea408142c253bb8e16596218e4e328d019c58/862c3/assets/img/traefik.logo.bright@3x.svg
+maintainers:
+  - name: nestorsalceda
+    email: nestor.salceda@sysdig.com
+  - name: fedebarcelona
+    email: fede.barcelona@sysdig.com
+rules:
+  - raw: |
+      - macro: traefik_consider_syscalls
+        condition: (evt.num < 0)
+
+      - macro: app_traefik
+        condition: container and container.image startswith "traefik"
+
+      # Restricting listening ports to selected set
+
+      - list: traefik_allowed_inbound_ports_tcp
+        items: [443, 80, 8080]
+
+      - rule: Unexpected inbound tcp connection traefik
+        desc: Detect inbound traffic to traefik using tcp on a port outside of expected set
+        condition: inbound and evt.rawres >= 0 and not fd.sport in (traefik_allowed_inbound_ports_tcp) and app_traefik
+        output: Inbound network connection to traefik on unexpected port (command=%proc.cmdline pid=%proc.pid connection=%fd.name sport=%fd.sport user=%user.name %container.info image=%container.image)
+        priority: NOTICE
+
+      # Restricting spawned processes to selected set
+
+      - list: traefik_allowed_processes
+        items: ["traefik"]
+
+      - rule: Unexpected spawned process traefik
+        desc: Detect a process started in a traefik container outside of an expected set
+        condition: spawned_process and not proc.name in (traefik_allowed_processes) and app_traefik
+        output: Unexpected process spawned in traefik container (command=%proc.cmdline pid=%proc.pid user=%user.name %container.info image=%container.image)
+        priority: NOTICE

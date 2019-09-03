@@ -31,6 +31,7 @@ description: |
   Detects an unexpected system call executed in nginx container
 keywords:
   - web
+  - loadbalancer
 icon: https://www.nginx.com/wp-content/themes/nginx-theme/assets/img/logo.png
 maintainers:
   - name: nestorsalceda
