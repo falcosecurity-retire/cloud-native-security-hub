@@ -1,0 +1,113 @@
+---
+apiVersion: v1
+kind: FalcoRules
+vendor: etcd
+name: etcd
+description: |
+  # etcd Falco Rules
+
+  A distributed, reliable key-value store for the most critical data of a distributed system
+
+  ## Rules
+
+  ### Unauthorized process opened an outbund connection
+
+  Detects if an unauthorized process is trying to open an outbound connection
+
+  ### Unauthorized inbound tcp connection etcd
+
+  Detects inbound network connections to etcd on unexpected ports
+
+  ### Unexpected spawned process etcd
+
+  Detects an unexpected process spawned in the etcd container
+
+  ### Unexpected file read or written by etcd
+
+  Detects an attempt to access a file readonly other than below an espected list of paths
+
+  ### Unexpected system calls in etcd container
+
+  Detects an unexpected system call executed in etcd container
+keywords:
+  - databases
+icon: https://raw.githubusercontent.com/cncf/artwork/master/projects/etcd/horizontal/color/etcd-horizontal-color.png
+maintainers:
+  - name: nestorsalceda
+    email: nestor.salceda@sysdig.com
+  - name: fedebarcelona
+    email: fede.barcelona@sysdig.com
+rules:
+  - raw: |
+      - macro: etcd_consider_syscalls
+        condition: (evt.num < 0)
+
+      - macro: app_etcd
+        condition: container and container.image contains "k8s_etcd"
+
+      # Not considering all inbound networking suspect
+
+      - list: etcd_outbound_processes
+        items:
+        - etcd
+
+      - rule: Unauthorized process opened an outbound connection (etcd)
+        desc: A etcd process tried to open an outbound connection and is not whitelisted
+        condition: outbound and not proc.name in (etcd_outbound_processes) and app_etcd
+        output: Non-whitelisted process opened an outbound connection (command=%proc.cmdline
+          connection=%fd.name)
+        priority: WARNING
+
+      # Restricting listening ports to selected set
+
+      - list: etcd_allowed_inbound_ports_tcp
+        items: [2380, 4001, 7001]
+
+      - rule: Unexpected inbound tcp connection etcd
+        desc: Detect inbound traffic to etcd using tcp on a port outside of expected set
+        condition: inbound and evt.rawres >= 0 and not fd.sport in (etcd_allowed_inbound_ports_tcp) and app_etcd
+        output: Inbound network connection to etcd on unexpected port (command=%proc.cmdline pid=%proc.pid connection=%fd.name sport=%fd.sport user=%user.name %container.info image=%container.image)
+        priority: NOTICE
+
+      # Restricting spawned processes to selected set
+
+      - list: etcd_allowed_processes
+        items: ["/usr/local/bin/etcd"]
+
+      - rule: Unexpected spawned process etcd
+        desc: Detect a process started in a etcd container outside of an expected set
+        condition: spawned_process and not proc.name in (etcd_allowed_processes) and app_etcd
+        output: Unexpected process spawned in etcd container (command=%proc.cmdline pid=%proc.pid user=%user.name %container.info image=%container.image)
+        priority: NOTICE
+
+      # Restricting files read or written to specific set
+
+      - list: etcd_allowed_file_prefixes_readonly
+        items: ["/proc/self", "/var/etcd/data/member"]
+
+      - rule: Unexpected file access readonly for etcd
+        desc: Detect an attempt to access a file readonly other than below an expected list of directories
+        condition: (open_read and evt.is_open_write=false) and not fd.name pmatch (etcd_allowed_file_prefixes_readonly) and app_etcd
+        output: Unexpected file accessed readonly for etcd (command=%proc.cmdline pid=%proc.pid file=%fd.name %container.info image=%container.image)
+        priority: NOTICE
+
+      - list: etcd_allowed_file_prefixes_readwrite
+        items: ["/var/etcd/data/member"]
+
+      - rule: Unexpected file access readwrite for etcd
+        desc: Detect an attempt to access a file readwrite other than below an expected list of directories
+        condition: (open_write) and not fd.name pmatch (etcd_allowed_file_prefixes_readwrite) and app_etcd
+        output: Unexpected file accessed readwrite for etcd (command=%proc.cmdline pid=%proc.pid file=%fd.name %container.info image=%container.image)
+        priority: NOTICE
+
+      # Restricting syscalls to selected set
+
+      - list: etcd_allowed_syscalls
+        items: [accept, openat, renameat, unlinkat]
+
+      - rule: Unexpected syscall etcd
+        desc: Detect a syscall in a etcd container outside of an expected set
+        condition: etcd_consider_syscalls and not evt.type in ("<unknown>", etcd_allowed_syscalls) and app_etcd
+        output: Unexpected syscall in etcd container (command=%proc.cmdline pid=%proc.pid user=%user.name syscall=%evt.type args=%evt.args %container.info image=%container.image)
+        priority: NOTICE
+        warn_evttypes: False
