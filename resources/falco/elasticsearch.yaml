@@ -30,41 +30,41 @@ maintainers:
     email: fede.barcelona@sysdig.com
 rules:
   - raw: |
-    - macro: elasticsearch_consider_syscalls
-      condition: (evt.num < 0)
+      - macro: elasticsearch_consider_syscalls
+        condition: (evt.num < 0)
 
-    - macro: app_elasticsearch
-      condition: container and container.image contains "elasticsearch"
+      - macro: app_elasticsearch
+        condition: container and container.image contains "elasticsearch"
 
-    # Restricting listening ports to selected set
+      # Restricting listening ports to selected set
 
-    - list: elasticsearch_allowed_inbound_ports_tcp
-      items: [37125, 37385, 40689, 41503, 44173, 9200, 9300]
+      - list: elasticsearch_allowed_inbound_ports_tcp
+        items: [37125, 37385, 40689, 41503, 44173, 9200, 9300]
 
-    - rule: Unexpected inbound tcp connection elasticsearch
-      desc: Detect inbound traffic to elasticsearch using tcp on a port outside of expected set
-      condition: inbound and evt.rawres >= 0 and not fd.sport in (elasticsearch_allowed_inbound_ports_tcp) and app_elasticsearch
-      output: Inbound network connection to elasticsearch on unexpected port (command=%proc.cmdline pid=%proc.pid connection=%fd.name sport=%fd.sport user=%user.name %container.info image=%container.image)
-      priority: NOTICE
+      - rule: Unexpected inbound tcp connection elasticsearch
+        desc: Detect inbound traffic to elasticsearch using tcp on a port outside of expected set
+        condition: inbound and evt.rawres >= 0 and not fd.sport in (elasticsearch_allowed_inbound_ports_tcp) and app_elasticsearch
+        output: Inbound network connection to elasticsearch on unexpected port (command=%proc.cmdline pid=%proc.pid connection=%fd.name sport=%fd.sport user=%user.name %container.info image=%container.image)
+        priority: NOTICE
 
-    # Restricting spawned processes to selected set
+      # Restricting spawned processes to selected set
 
-    - list: elasticsearch_allowed_processes
-      items: ["/bin/bash", "/bin/sh", "/proc/self/exe", "/sbin/ldconfig", "/usr/lib/jvm/jre-1.8.0-openjdk/bin/java", "/usr/share/elasticsearch/plugins/x-pack/platform/linux-x86_64/bin/controller", "chown", "controller", "cut", "dirname", "egrep", "env", "grep", "hostname", "java", "ldconfig", "tr", "app-entrypoint.", "basename", "getent", "groupadd", "nami", "node", "sysctl", "useradd", "sleep", "elasticsearch", "elasticsearch-p", "id", "ldconfig.real", "mktemp", "ps", "sh", "su", "tini"]
+      - list: elasticsearch_allowed_processes
+        items: ["/bin/bash", "/bin/sh", "/proc/self/exe", "/sbin/ldconfig", "/usr/lib/jvm/jre-1.8.0-openjdk/bin/java", "/usr/share/elasticsearch/plugins/x-pack/platform/linux-x86_64/bin/controller", "chown", "controller", "cut", "dirname", "egrep", "env", "grep", "hostname", "java", "ldconfig", "tr", "app-entrypoint.", "basename", "getent", "groupadd", "nami", "node", "sysctl", "useradd", "sleep", "elasticsearch", "elasticsearch-p", "id", "ldconfig.real", "mktemp", "ps", "sh", "su", "tini"]
 
-    - rule: Unexpected spawned process elasticsearch
-      desc: Detect a process started in a elasticsearch container outside of an expected set
-      condition: spawned_process and not proc.name in (elasticsearch_allowed_processes) and app_elasticsearch
-      output: Unexpected process spawned in elasticsearch container (command=%proc.cmdline pid=%proc.pid user=%user.name %container.info image=%container.image)
-      priority: NOTICE
+      - rule: Unexpected spawned process elasticsearch
+        desc: Detect a process started in a elasticsearch container outside of an expected set
+        condition: spawned_process and not proc.name in (elasticsearch_allowed_processes) and app_elasticsearch
+        output: Unexpected process spawned in elasticsearch container (command=%proc.cmdline pid=%proc.pid user=%user.name %container.info image=%container.image)
+        priority: NOTICE
 
-    # Restricting files read or written to specific set
+      # Restricting files read or written to specific set
 
-    - list: elasticsearch_allowed_file_prefixes_readwrite
-      items: ["/dev", "/tmp", "/usr/share/elasticsearch", "/etc", "/opt"]
+      - list: elasticsearch_allowed_file_prefixes_readwrite
+        items: ["/dev", "/tmp", "/usr/share/elasticsearch", "/etc", "/opt"]
 
-    - rule: Unexpected file access readwrite for elasticsearch
-      desc: Detect an attempt to access a file readwrite other than below an expected list of directories
-      condition: (open_write) and not fd.name pmatch (elasticsearch_allowed_file_prefixes_readwrite) and app_elasticsearch
-      output: Unexpected file accessed readwrite for elasticsearch (command=%proc.cmdline pid=%proc.pid file=%fd.name %container.info image=%container.image)
-      priority: NOTICE
+      - rule: Unexpected file access readwrite for elasticsearch
+        desc: Detect an attempt to access a file readwrite other than below an expected list of directories
+        condition: (open_write) and not fd.name pmatch (elasticsearch_allowed_file_prefixes_readwrite) and app_elasticsearch
+        output: Unexpected file accessed readwrite for elasticsearch (command=%proc.cmdline pid=%proc.pid file=%fd.name %container.info image=%container.image)
+        priority: NOTICE
