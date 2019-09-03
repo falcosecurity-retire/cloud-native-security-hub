@@ -1,5 +1,6 @@
 FROM alpine:3.10
 
 WORKDIR /resources
-COPY falco falco
+COPY resources resources
+COPY vendors vendors
 CMD ["/bin/false"]
