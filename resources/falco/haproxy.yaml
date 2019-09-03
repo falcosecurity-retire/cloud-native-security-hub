@@ -1,0 +1,81 @@
+---
+apiVersion: v1
+kind: FalcoRules
+vendor: HAProxy
+name: HAProxy
+description: |
+  # HAProxy Falco Rules
+
+  HAProxy is a free, very fast and reliable solution offering high availability, load balancing, and proxying for TCP and HTTP-based applications. It is particularly suited for very high traffic web sites and powers quite a number of the world's most visited ones. Over the years it has become the de-facto standard opensource load balancer, is now shipped with most mainstream Linux distributions, and is often deployed by default in cloud platforms.
+
+  ## Rules
+
+  ### Unauthorized inbound tcp connection haproxy
+
+  Detects inbound network connections to haproxy on unexpected ports
+
+  ### Unexpected spawned process haproxy
+
+  Detects an unexpected process spawned in the haproxy container
+
+  ### Unexpected file read or written by haproxy
+
+  Detects an attempt to access a file readonly other than below an espected list of paths
+keywords:
+  - web
+icon: https://www.cncf.io/wp-content/uploads/2018/04/HAProxy-logo.png
+maintainers:
+  - name: nestorsalceda
+    email: nestor.salceda@sysdig.com
+  - name: fedebarcelona
+    email: fede.barcelona@sysdig.com
+rules:
+  - raw: |
+      - macro: haproxy_consider_syscalls
+        condition: (evt.num < 0)
+
+      - macro: app_haproxy
+        condition: container and container.image contains "haproxy"
+
+      # Restricting listening ports to selected set
+
+      - list: haproxy_allowed_inbound_ports_tcp
+        items: [80, 443, 1936]
+
+      - rule: Unexpected inbound tcp connection haproxy
+        desc: Detect inbound traffic to haproxy using tcp on a port outside of expected set
+        condition: inbound and evt.rawres >= 0 and not fd.sport in (haproxy_allowed_inbound_ports_tcp) and app_haproxy
+        output: Inbound network connection to haproxy on unexpected port (command=%proc.cmdline pid=%proc.pid connection=%fd.name sport=%fd.sport user=%user.name %container.info image=%container.image)
+        priority: NOTICE
+
+      # Restricting spawned processes to selected set
+
+      - list: haproxy_allowed_processes
+        items: ["haproxy"]
+
+      - rule: Unexpected spawned process haproxy
+        desc: Detect a process started in a haproxy container outside of an expected set
+        condition: spawned_process and not proc.name in (haproxy_allowed_processes) and app_haproxy
+        output: Unexpected process spawned in haproxy container (command=%proc.cmdline pid=%proc.pid user=%user.name %container.info image=%container.image)
+        priority: NOTICE
+
+      # Restricting files read or written to specific set
+
+      - list: haproxy_allowed_file_prefixes_readonly
+        items: ["/etc", "/lib/x86_64-linux-gnu", "/proc/sys/kernel", "/sys/devices/system/cpu", "/usr/lib/x86_64-linux-gnu"]
+
+      - rule: Unexpected file access readonly for haproxy
+        desc: Detect an attempt to access a file readonly other than below an expected list of directories
+        condition: (open_read and evt.is_open_write=false) and not fd.name pmatch (haproxy_allowed_file_prefixes_readonly) and app_haproxy
+        output: Unexpected file accessed readonly for haproxy (command=%proc.cmdline pid=%proc.pid file=%fd.name %container.info image=%container.image)
+        priority: NOTICE
+
+      - list: haproxy_allowed_file_prefixes_readwrite
+        items: ["/var/log/haproxy", "/var/run"]
+      # Remember to add your haproxy cache path
+
+      - rule: Unexpected file access readwrite for haproxy
+        desc: Detect an attempt to access a file readwrite other than below an expected list of directories
+        condition: (open_write) and not fd.name pmatch (haproxy_allowed_file_prefixes_readwrite) and app_haproxy
+        output: Unexpected file accessed readwrite for haproxy (command=%proc.cmdline pid=%proc.pid file=%fd.name %container.info image=%container.image)
+        priority: NOTICE
