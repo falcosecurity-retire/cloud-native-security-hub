@@ -1,0 +1,70 @@
+---
+apiVersion: v1
+kind: FalcoRules
+vendor: FluentD
+name: FluentD
+description: |
+  # FluentD Falco Rules
+
+  A distributed, reliable key-value store for the most critical data of a distributed system
+
+  ## Rules
+
+  ### Unauthorized inbound tcp connection fluentd
+
+  Detects inbound network connections to fluentd on unexpected ports
+
+  ### Unexpected spawned process fluentd
+
+  Detects an unexpected process spawned in the fluentd container
+
+  ### Unexpected file read or written by fluentd
+
+  Detects an attempt to access a file readonly other than below an expected list of paths
+
+keywords:
+  - logging
+icon: https://raw.githubusercontent.com/fluent/fluentd-docs/master/public/logo/Fluentd_square.png
+maintainers:
+  - name: nestorsalceda
+    email: nestor.salceda@sysdig.com
+  - name: fedebarcelona
+    email: fede.barcelona@sysdig.com
+rules:
+  - raw: |
+      - macro: fluentd_consider_syscalls
+        condition: (evt.num < 0)
+
+      - macro: app_fluentd
+        condition: container and container.image contains "fluentd"
+
+      # Restricting listening ports to selected set
+
+      - list: fluentd_allowed_inbound_ports_tcp
+        items: [31337]
+
+      - rule: Unexpected inbound tcp connection fluentd
+        desc: Detect inbound traffic to fluentd using tcp on a port outside of expected set
+        condition: inbound and evt.rawres >= 0 and not fd.sport in (fluentd_allowed_inbound_ports_tcp) and app_fluentd
+        output: Inbound network connection to fluentd on unexpected port (command=%proc.cmdline pid=%proc.pid connection=%fd.name sport=%fd.sport user=%user.name %container.info image=%container.image)
+        priority: NOTICE
+
+      # Restricting spawned processes to selected set
+
+      - list: fluentd_allowed_processes
+        items: ["/bin/sh", "/proc/self/exe", "/usr/bin/ruby2.1", "date", "expr", "fluentd", "grep", "run.sh", "sed", "stat"]
+
+      - rule: Unexpected spawned process fluentd
+        desc: Detect a process started in a fluentd container outside of an expected set
+        condition: spawned_process and not proc.name in (fluentd_allowed_processes) and app_fluentd
+        output: Unexpected process spawned in fluentd container (command=%proc.cmdline pid=%proc.pid user=%user.name %container.info image=%container.image)
+        priority: NOTICE
+
+      - list: fluentd_allowed_file_prefixes_readwrite
+        items: ["/var/log"]
+
+      - rule: Unexpected file access readwrite for fluentd
+        desc: Detect an attempt to access a file readwrite other than below an expected list of directories
+        condition: (open_write) and not fd.name pmatch (fluentd_allowed_file_prefixes_readwrite) and app_fluentd
+        output: Unexpected file accessed readwrite for fluentd (command=%proc.cmdline pid=%proc.pid file=%fd.name %container.info image=%container.image)
+        priority: NOTICE
