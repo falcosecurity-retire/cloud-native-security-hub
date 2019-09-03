@@ -1,0 +1,83 @@
+---
+apiVersion: v1
+kind: FalcoRules
+vendor: Consul
+name: Consul
+description: |
+  # Consul Falco Rules
+
+  Consul is a service networking solution to connect and secure services across any runtime platform and public or private cloud
+
+  ## Rules
+
+  ### Unexpected inbound tcp connection consul
+
+  Detects inbound network connections to consul on unexpected ports
+
+  ### Unexpected spawned process consul
+
+  Detects an unexpected process spawned in the consul container
+
+  ### Unexpected system calls in consul container
+
+  Detects an unexpected system call executed in consul container
+keywords:
+  - consul
+icon: https://s3.amazonaws.com/hashicorp-marketing-web-assets/brand/Consul_PrimaryLogo_FullColor.BkqqyRBpl.svg
+maintainers:
+  - name: nestorsalceda
+    email: nestor.salceda@sysdig.com
+  - name: fedebarcelona
+    email: fede.barcelona@sysdig.com
+rules:
+  - raw: |
+    - macro: consul_consider_syscalls
+      condition: (evt.num < 0)
+
+    # These policies are limited to containers, specifically those where
+    # the container image name contains "consul"
+    - macro: app_consul
+      condition: container and container.image contains "consul"
+
+    # Restricting listening ports to selected set
+
+    - list: consul_allowed_inbound_ports_tcp
+      items: [8300, 8301, 8302, 8500, 8600]
+
+    - rule: Unexpected inbound tcp connection consul
+      desc: Detect inbound traffic to consul using tcp on a port outside of expected set
+      condition: inbound and evt.rawres >= 0 and not fd.sport in (consul_allowed_inbound_ports_tcp) and app_consul
+      output: Inbound network connection to consul on unexpected port (command=%proc.cmdline pid=%proc.pid connection=%fd.name sport=%fd.sport user=%user.name %container.info image=%container.image)
+      priority: NOTICE
+
+    # Restricting spawned processes to selected set
+
+    - list: consul_allowed_processes
+      items: ["/bin/consul", "/bin/sh", "/proc/self/exe", "awk", "consul", "ping", "seq", "sleep"]
+
+    - rule: Unexpected spawned process consul
+      desc: Detect a process started in a consul container outside of an expected set
+      condition: spawned_process and not proc.name in (consul_allowed_processes) and app_consul
+      output: Unexpected process spawned in consul container (command=%proc.cmdline pid=%proc.pid user=%user.name %container.info image=%container.image)
+      priority: NOTICE
+
+    - list: consul_allowed_file_prefixes_readwrite
+      items: ["/dev", "/var/lib/consul"]
+
+    - rule: Unexpected file access readwrite for consul
+      desc: Detect an attempt to access a file readwrite other than below an expected list of directories
+      condition: (open_write) and not fd.name pmatch (consul_allowed_file_prefixes_readwrite) and app_consul
+      output: Unexpected file accessed readwrite for consul (command=%proc.cmdline pid=%proc.pid file=%fd.name %container.info image=%container.image)
+      priority: NOTICE
+
+    # Restricting syscalls to selected set
+
+    - list: consul_allowed_syscalls
+      items: [accept, bind, clone, connect, dup, execve, fork, listen, mkdirat, open, openat, pipe, procexit, recvfrom, recvmsg, sendto, socket, unlinkat]
+
+    - rule: Unexpected syscall consul
+      desc: Detect a syscall in a consul container outside of an expected set
+      condition: consul_consider_syscalls and not evt.type in ("<unknown>", consul_allowed_syscalls) and app_consul
+      output: Unexpected syscall in consul container (command=%proc.cmdline pid=%proc.pid user=%user.name syscall=%evt.type args=%evt.args %container.info image=%container.image)
+      priority: NOTICE
+      warn_evttypes: False
