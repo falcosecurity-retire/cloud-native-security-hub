@@ -1,0 +1,90 @@
+---
+apiVersion: v1
+kind: FalcoRules
+vendor: Rook
+name: Rook
+description: |
+  # Rook Falco Rules
+
+  Rook turns distributed storage systems into self-managing, self-scaling, self-healing storage services. It automates the tasks of a storage administrator: deployment, bootstrapping, configuration, provisioning, scaling, upgrading, migration, disaster recovery, monitoring, and resource management.
+
+  ## Rules
+
+  ### Unexpected spawned process Rook
+
+  Detects an unexpected process spawned in the rook container
+
+  ### Unexpected file read or written by Rook
+
+  Detects an attempt to access a file readonly other than below an espected list of paths
+
+  ### Unexpected system calls in Rook container
+
+  Detects an unexpected system call executed in rook container
+keywords:
+  - databases
+icon: https://www.pngfind.com/pngs/m/581-5811204_rook-kubernetes-logo-hd-png-download.png
+maintainers:
+  - name: nestorsalceda
+    email: nestor.salceda@sysdig.com
+  - name: fedebarcelona
+    email: fede.barcelona@sysdig.com
+rules:
+  - raw: |
+      - macro: rook_consider_syscalls
+        condition: (evt.num < 0)
+
+      # These policies are limited to containers, specifically those where
+      # the container image name starts with "rook"
+      - macro: app_rook
+        condition: container and container.image contains "rook"
+
+      # Not considering all inbound networking suspect
+
+      # Not considering all outbound networking suspect
+
+      # Restricting listening ports to selected set
+
+
+      # Restricting spawned processes to selected set
+
+      - list: rook_allowed_processes
+        items: ["/bin/sh", "/sbin/ldconfig.real", "/tini", "/usr/bin/python2.7", "/usr/local/bin/rook", "ceph", "ldconfig", "ldconfig.real", "rook"]
+
+      - rule: Unexpected spawned process rook
+        desc: Detect a process started in a rook container outside of an expected set
+        condition: spawned_process and not proc.name in (rook_allowed_processes) and app_rook
+        output: Unexpected process spawned in rook container (command=%proc.cmdline pid=%proc.pid user=%user.name %container.info image=%container.image)
+        priority: NOTICE
+
+      # Restricting files read or written to specific set
+
+      - list: rook_allowed_file_prefixes_readonly
+        items: ["/"]
+
+      - rule: Unexpected file access readonly for rook
+        desc: Detect an attempt to access a file readonly other than below an expected list of directories
+        condition: (open_read and evt.is_open_write=false) and not fd.name pmatch (rook_allowed_file_prefixes_readonly) and app_rook
+        output: Unexpected file accessed readonly for rook (command=%proc.cmdline pid=%proc.pid file=%fd.name %container.info image=%container.image)
+        priority: NOTICE
+
+      - list: rook_allowed_file_prefixes_readwrite
+        items: ["/dev", "/tmp"]
+
+      - rule: Unexpected file access readwrite for rook
+        desc: Detect an attempt to access a file readwrite other than below an expected list of directories
+        condition: (open_write) and not fd.name pmatch (rook_allowed_file_prefixes_readwrite) and app_rook
+        output: Unexpected file accessed readwrite for rook (command=%proc.cmdline pid=%proc.pid file=%fd.name %container.info image=%container.image)
+        priority: NOTICE
+
+      # Restricting syscalls to selected set
+
+      - list: rook_allowed_syscalls
+        items: [clone, connect, dup, execve, getegid, geteuid, getgid, getrlimit, getuid, open, openat, pipe, procexit, sendmsg, socket, unlinkat]
+
+      - rule: Unexpected syscall rook
+        desc: Detect a syscall in a rook container outside of an expected set
+        condition: rook_consider_syscalls and not evt.type in ("<unknown>", rook_allowed_syscalls) and app_rook
+        output: Unexpected syscall in rook container (command=%proc.cmdline pid=%proc.pid user=%user.name syscall=%evt.type args=%evt.args %container.info image=%container.image)
+        priority: NOTICE
+        warn_evttypes: False
