@@ -30,7 +30,7 @@ description: |
 
   Detects an unexpected system call executed in etcd container
 keywords:
-  - databases
+  - database
 icon: https://raw.githubusercontent.com/cncf/artwork/master/projects/etcd/horizontal/color/etcd-horizontal-color.png
 maintainers:
   - name: nestorsalceda

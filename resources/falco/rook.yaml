@@ -22,7 +22,7 @@ description: |
 
   Detects an unexpected system call executed in rook container
 keywords:
-  - databases
+  - storage
 icon: https://www.pngfind.com/pngs/m/581-5811204_rook-kubernetes-logo-hd-png-download.png
 maintainers:
   - name: nestorsalceda
