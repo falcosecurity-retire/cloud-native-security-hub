@@ -1,0 +1,76 @@
+---
+apiVersion: v1
+kind: FalcoRules
+vendor: PostgreSQL
+name: PostgreSQL
+description: |
+  # PostgreSQL Falco Rules
+
+  ## Rules
+
+  ### Unexpected inbound tcp connection postgres
+
+  Detects inbound network connections to postgres on unexpected ports
+
+  ### Unexpected spawned process postgres
+
+  Detects an unexpected process spawned in the postgres container
+
+  ### Unexpected file read or written by postgres
+
+  Detects an attempt to access a file readonly other than below an espected list of paths
+keywords:
+  - database
+icon: https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Postgresql_elephant.svg/540px-Postgresql_elephant.svg.png
+maintainers:
+  - name: nestorsalceda
+    email: nestor.salceda@sysdig.com
+  - name: fedebarcelona
+    email: fede.barcelona@sysdig.com
+rules:
+  - raw: |
+      - macro: postgres_consider_syscalls
+        condition: (evt.num < 0)
+
+      - macro: app_postgres
+        condition: container and container.image contains "postgres"
+
+      - list: postgres_allowed_inbound_ports_tcp
+        items: [5432]
+
+      - rule: Unexpected inbound tcp connection postgres
+        desc: Detect inbound traffic to postgres using tcp on a port outside of expected set
+        condition: inbound and evt.rawres >= 0 and not fd.sport in (postgres_allowed_inbound_ports_tcp) and app_postgres
+        output: Inbound network connection to postgres on unexpected port (command=%proc.cmdline pid=%proc.pid connection=%fd.name sport=%fd.sport user=%user.name %container.info image=%container.image)
+        priority: NOTICE
+
+      # Restricting spawned processes to selected set
+
+      - list: postgres_allowed_processes
+        items: ["/proc/self/exe", "pg_isready", "postgres", "psql", "postgres: autovacuum launcher process", "pg_ctl" , "postgres: checkpointer process   ", "postgres: stats collector process   ", "postgres: wal writer process   ", "postgres: writer process   ", "sh"]
+
+      - rule: Unexpected spawned process postgres
+        desc: Detect a process started in a postgres container outside of an expected set
+        condition: spawned_process and not proc.name in (postgres_allowed_processes) and app_postgres
+        output: Unexpected process spawned in postgres container (command=%proc.cmdline pid=%proc.pid user=%user.name %container.info image=%container.image)
+        priority: NOTICE
+
+      # Restricting files read or written to specific set
+
+      - list: postgres_allowed_file_prefixes_readonly
+        items: ["/dev", "/etc", "/lib/x86_64-linux-gnu", "/usr/lib/locale", "/usr/lib/x86_64-linux-gnu", "/usr/share/locale", "/var/lib/postgresql/data", "/usr/share/zoneinfo", "/var/lib/postgresql", "/usr/lib/postgresql", "/usr/share/postgresql", "/var/run/postgresql"]
+
+      - rule: Unexpected file access readonly for postgres
+        desc: Detect an attempt to access a file readonly other than below an expected list of directories
+        condition: (open_read and evt.is_open_write=false) and not fd.name pmatch (postgres_allowed_file_prefixes_readonly) and app_postgres
+        output: Unexpected file accessed readonly for postgres (command=%proc.cmdline pid=%proc.pid file=%fd.name %container.info image=%container.image)
+        priority: NOTICE
+
+      - list: postgres_allowed_file_prefixes_readwrite
+        items: ["/var/lib/postgresql/data", "/var/run/postgresql"]
+
+      - rule: Unexpected file access readwrite for postgres
+        desc: Detect an attempt to access a file readwrite other than below an expected list of directories
+        condition: (open_write) and not fd.name pmatch (postgres_allowed_file_prefixes_readwrite) and app_postgres
+        output: Unexpected file accessed readwrite for postgres (command=%proc.cmdline pid=%proc.pid file=%fd.name %container.info image=%container.image)
+        priority: NOTICE
