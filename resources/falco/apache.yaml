@@ -3,6 +3,7 @@ apiVersion: v1
 kind: FalcoRules
 vendor: Apache
 name: Apache
+shortDescription: Falco rules for securing Apache HTTP Server
 description: |
   # Apache Falco Rules
   The Apache HTTP Server, colloquially called Apache (/əˈpætʃi/ ə-PATCH-ee),
@@ -12,17 +13,40 @@ description: |
 
   ## Rules
 
-  ### Unexpected inbound tcp connection apache
+  ### Unexpected inbound TCP connection apache
 
-  Detects inbound network connections to apache on unexpected ports
+  Detects inbound traffic to apache using tcp on a port outside of expected set
+
+  Allowed inbound ports:
+
+  * 80
+  * 443
 
   ### Unexpected spawned process apache
 
-  Detects an unexpected process spawned in the apache container
+  Detects a process started in a apache container outside of an expected set
+
+  Allowed processes:
+  * apache2
+  * basename
+  * grep
+  * app-entrypoint.
+  * node
+  * sleep
+  * dirname
+  * httpd
+  * nami
+  * sh
+  * tini
 
   ### Unexpected file access readwrite for apache
 
-  Detects an unexpected file accessed in readwrite mode for apache
+  Detects an attempt to access a file readwrite other than below an expected list of directories
+
+  Allowed file prefixes for readwrite:
+  * /opt
+  * /tmp
+  * /dev/null
 keywords:
   - web
 icon: https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Apache_HTTP_server_logo_%282016%29.svg/300px-Apache_HTTP_server_logo_%282016%29.svg.png
