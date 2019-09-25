@@ -3,6 +3,7 @@ apiVersion: v1
 kind: FalcoRules
 vendor: Nginx
 name: Nginx
+shortDescription: Falco rules for securing Nginx
 description: |
   # Nginx Falco Rules
 
@@ -12,23 +13,66 @@ description: |
 
   ### Unauthorized process opened an outbund connection
 
-  Detects if an unauthorized process is trying to open an outbound connection
+  Detects if nginx is trying to open an outbound connection
 
   ### Unauthorized inbound tcp connection nginx
 
   Detects inbound network connections to nginx on unexpected ports
 
+  Allowed ports:
+
+  * 80
+  * 443
+  * 8080
+  * 8443
+
   ### Unexpected spawned process nginx
 
   Detects an unexpected process spawned in the nginx container
 
+  Allowed processes:
+
+  * nginx
+  * app-entrypoint.
+  * basename
+  * dirname
+  * grep
+  * nami
+  * node
+  * tini
+
   ### Unexpected file read or written by nginx
 
-  Detects an attempt to access a file readonly other than below an espected list of paths
+  Detects an attempt to access a file readwrite other than below an espected list of paths
+
+  Allowed file prefixes for readwrite:
+
+  * /var/log/nginx
+  * /var/run
 
   ### Unexpected system calls in nginx container
 
   Detects an unexpected system call executed in nginx container
+
+  Allowed system calls:
+
+  * accept
+  * bind
+  * clone
+  * connect
+  * dup
+  * listen
+  * mkdir
+  * open
+  * recvfrom
+  * recvmsg
+  * sendto
+  * setgid
+  * setuid
+  * socket
+  * socketpair
+
+
 keywords:
   - web
   - loadbalancer

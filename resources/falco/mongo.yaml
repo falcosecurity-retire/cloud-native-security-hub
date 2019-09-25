@@ -3,6 +3,7 @@ apiVersion: v1
 kind: FalcoRules
 vendor: Mongo
 name: MongoDB
+shortDescription: Falco rules for securing MongoDB
 description: |
   # MongoDB Falco Rules
   MongoDB is a free and open-source cross-platform document-oriented database program.
@@ -16,13 +17,49 @@ description: |
 
   Detects an inbound network connection to mongo on an unexpected port
 
+  Allowed ports:
+
+  * 27017
+
   ### Unexpected spawned process mongo
 
   Detects an unexpected process spawned in the mongo container
 
+  Allowed processes:
+
+  * mongod
+  * mongo
+  * ftdc
+  * WTCheck.tThread
+  * app-entrypoint
+  * basename
+  * dirname
+  * getent
+  * gosu
+  * grep
+  * groupadd
+  * nami
+  * node
+  * run.sh
+  * sed
+  * sh
+  * sleep
+  * tini
+  * useradd
+  * which
+
   ### Unexpected file access readwrite for mongo
 
   Detects an unexpected file accessed in readwrite mode for mongo
+
+  Allowed file prefixes for readwrite:
+
+  * /data/db
+  * /etc
+  * /opt
+  * /tmp
+  * /root/.nami
+
 keywords:
   - database
 icon: https://upload.wikimedia.org/wikipedia/en/thumb/4/45/MongoDB-Logo.svg/2560px-MongoDB-Logo.svg.png

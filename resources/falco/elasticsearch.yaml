@@ -3,6 +3,7 @@ apiVersion: v1
 kind: FalcoRules
 vendor: ElasticSearch
 name: ElasticSearch
+shortDescription: Falco rules for securing ElasticSearch
 description: |
   # ElasticSearch Falco Rules
   Elasticsearch is a distributed, RESTful search and analytics engine capable of addressing a growing number of use cases. As the heart of the Elastic Stack, it centrally stores your data so you can discover the expected and uncover the unexpected.
@@ -13,13 +14,70 @@ description: |
 
   Detects inbound network connections to elasticsearch on unexpected ports
 
+  Allowed ports:
+
+  * 37125
+  * 37385
+  * 40689
+  * 41503
+  * 44173
+  * 9200
+  * 9300
+
   ### Unexpected spawned process elasticsearch
 
   Detects an unexpected process spawned in the elasticsearch container
 
+  Allowed processes:
+
+  * /bin/bash
+  * /bin/sh
+  * /proc/self/exe
+  * /sbin/ldconfig
+  * /usr/lib/jvm/jre-1.8.0-openjdk/bin/java
+  * /usr/share/elasticsearch/plugins/x-pack/platform/linux-x86_64/bin/controller"
+  * chown
+  * controller
+  * cut
+  * dirname
+  * egrep
+  * env
+  * grep
+  * hostname
+  * java
+  * ldconfig
+  * tr
+  * app-entrypoint
+  * basename
+  * getent
+  * groupadd
+  * nami
+  * node
+  * sysctl
+  * useradd
+  * sleep
+  * elasticsearch
+  * elasticsearch-p
+  * id
+  * ldconfig.real
+  * mktemp
+  * ps
+  * sh
+  * su
+  * tini
+
   ### Unexpected file access readwrite for elasticsearch
 
   Detects an unexpected file accessed in readwrite mode for elasticsearch
+
+  Allowed file prefixes for readwrite:
+
+  * /dev
+  * /tmp
+  * /usr/share/elasticsearch
+  * /etc
+  * /opt
+
 keywords:
   - database
 icon: https://static-www.elastic.co/v3/assets/bltefdd0b53724fa2ce/blt05047fdbe3b9c333/5c11ec1f3312ce2e785d9c30/logo-elastic-elasticsearch-lt.svg

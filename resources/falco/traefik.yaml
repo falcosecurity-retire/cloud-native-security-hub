@@ -3,6 +3,7 @@ apiVersion: v1
 kind: FalcoRules
 vendor: Traefik
 name: Traefik
+shortDescription: Falco rules for securing Traefik
 description: |
   # Traefik Falco Rules
 
@@ -14,9 +15,20 @@ description: |
 
   Detects inbound network connections to etcd on unexpected ports
 
+  Allowed ports:
+
+  * 443
+  * 80
+  * 8080
+
   ### Unexpected spawned process etcd
 
   Detects an unexpected process spawned in the etcd container
+
+  Allowed processes:
+
+  * traefik
+
 keywords:
   - loadbalancer
 icon: https://d33wubrfki0l68.cloudfront.net/1b8ea408142c253bb8e16596218e4e328d019c58/862c3/assets/img/traefik.logo.bright@3x.svg

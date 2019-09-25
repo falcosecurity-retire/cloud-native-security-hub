@@ -3,6 +3,7 @@ apiVersion: v1
 kind: FalcoRules
 vendor: Redis
 name: Redis
+shortDescription: Falco rules for securing Redis
 description: |
   # Redis Falco Rules
 
@@ -12,13 +13,39 @@ description: |
 
   Detects inbound network connections to redis on unexpected ports
 
+  Allowed ports:
+
+  * 6379
+
   ### Unexpected spawned process redis
 
   Detects an unexpected process spawned in the redis container
 
-  ### Unexpected file read or written by redis
+  Allowed processes:
 
-  Detects an attempt to access a file readonly other than below an espected list of paths
+  * redis-server
+  * app-entrypoint.
+  * basename
+  * dirname
+  * grep
+  * nami
+  * node
+  * redis-cli
+  * tini
+  * run.sh
+  * sed
+  * which
+
+  ### Unexpected file written by redis
+
+  Detects an attempt to access a file readwrite other than below an espected list of paths
+
+  Allowed file prefixes for readwrite:
+
+  * /data
+  * /opt
+  * /tmp
+
 keywords:
   - database
 icon: https://upload.wikimedia.org/wikipedia/en/thumb/6/6b/Redis_Logo.svg/2880px-Redis_Logo.svg.png
@@ -29,48 +56,39 @@ maintainers:
     email: fede.barcelona@sysdig.com
 rules:
   - raw: |
-      - macro: postgres_consider_syscalls
+      - macro: redis_consider_syscalls
         condition: (evt.num < 0)
 
-      - macro: app_postgres
-        condition: container and container.image contains "postgres"
+      - macro: app_redis
+        condition: container and container.image contains "redis"
 
-      - list: postgres_allowed_inbound_ports_tcp
-        items: [5432]
+      - list: redis_allowed_inbound_ports_tcp
+        items: [6379]
 
-      - rule: Unexpected inbound tcp connection postgres
-        desc: Detect inbound traffic to postgres using tcp on a port outside of expected set
-        condition: inbound and evt.rawres >= 0 and not fd.sport in (postgres_allowed_inbound_ports_tcp) and app_postgres
-        output: Inbound network connection to postgres on unexpected port (command=%proc.cmdline pid=%proc.pid connection=%fd.name sport=%fd.sport user=%user.name %container.info image=%container.image)
+      - rule: Unexpected inbound tcp connection redis
+        desc: Detect inbound traffic to redis using tcp on a port outside of expected set
+        condition: inbound and evt.rawres >= 0 and not fd.sport in (redis_allowed_inbound_ports_tcp) and app_redis
+        output: Inbound network connection to redis on unexpected port (command=%proc.cmdline pid=%proc.pid connection=%fd.name sport=%fd.sport user=%user.name %container.info image=%container.image)
         priority: NOTICE
 
       # Restricting spawned processes to selected set
 
-      - list: postgres_allowed_processes
-        items: ["/proc/self/exe", "pg_isready", "postgres", "psql", "postgres: autovacuum launcher process", "pg_ctl" , "postgres: checkpointer process   ", "postgres: stats collector process   ", "postgres: wal writer process   ", "postgres: writer process   ", "sh"]
+      - list: redis_allowed_processes
+        items: ["redis-server", "app-entrypoint.", "basename", "dirname", "grep", "nami", "node", "redis-cli", "tini", "run.sh", "sed", "which"]
 
-      - rule: Unexpected spawned process postgres
-        desc: Detect a process started in a postgres container outside of an expected set
-        condition: spawned_process and not proc.name in (postgres_allowed_processes) and app_postgres
-        output: Unexpected process spawned in postgres container (command=%proc.cmdline pid=%proc.pid user=%user.name %container.info image=%container.image)
+      - rule: Unexpected spawned process redis
+        desc: Detect a process started in a redis container outside of an expected set
+        condition: spawned_process and not proc.name in (redis_allowed_processes) and app_redis
+        output: Unexpected process spawned in redis container (command=%proc.cmdline pid=%proc.pid user=%user.name %container.info image=%container.image)
         priority: NOTICE
 
       # Restricting files read or written to specific set
 
-      - list: postgres_allowed_file_prefixes_readonly
-        items: ["/dev", "/etc", "/lib/x86_64-linux-gnu", "/usr/lib/locale", "/usr/lib/x86_64-linux-gnu", "/usr/share/locale", "/var/lib/postgresql/data", "/usr/share/zoneinfo", "/var/lib/postgresql", "/usr/lib/postgresql", "/usr/share/postgresql", "/var/run/postgresql"]
+      - list: redis_allowed_file_prefixes_readwrite
+        items: ["/data", "/opt", "/tmp"]
 
-      - rule: Unexpected file access readonly for postgres
-        desc: Detect an attempt to access a file readonly other than below an expected list of directories
-        condition: (open_read and evt.is_open_write=false) and not fd.name pmatch (postgres_allowed_file_prefixes_readonly) and app_postgres
-        output: Unexpected file accessed readonly for postgres (command=%proc.cmdline pid=%proc.pid file=%fd.name %container.info image=%container.image)
-        priority: NOTICE
-
-      - list: postgres_allowed_file_prefixes_readwrite
-        items: ["/var/lib/postgresql/data", "/var/run/postgresql"]
-
-      - rule: Unexpected file access readwrite for postgres
+      - rule: Unexpected file access readwrite for redis
         desc: Detect an attempt to access a file readwrite other than below an expected list of directories
-        condition: (open_write) and not fd.name pmatch (postgres_allowed_file_prefixes_readwrite) and app_postgres
-        output: Unexpected file accessed readwrite for postgres (command=%proc.cmdline pid=%proc.pid file=%fd.name %container.info image=%container.image)
+        condition: (open_write) and not fd.name pmatch (redis_allowed_file_prefixes_readwrite) and app_redis
+        output: Unexpected file accessed readwrite for redis (command=%proc.cmdline pid=%proc.pid file=%fd.name %container.info image=%container.image)
         priority: NOTICE
