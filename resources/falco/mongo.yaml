@@ -1,7 +1,7 @@
 ---
 apiVersion: v1
 kind: FalcoRules
-vendor: Mongo
+vendor: MongoDB
 name: MongoDB
 shortDescription: Falco rules for securing MongoDB
 description: |
