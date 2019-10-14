@@ -4,6 +4,7 @@ kind: FalcoRules
 vendor: Nginx
 name: Nginx
 shortDescription: Falco rules for securing Nginx
+version: 1.0.0
 description: |
   # Nginx Falco Rules
 

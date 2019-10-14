@@ -4,6 +4,7 @@ kind: FalcoRules
 vendor: Rook
 name: Rook
 shortDescription: Falco rules for securing Rook
+version: 1.0.0
 description: |
   # Rook Falco Rules
 

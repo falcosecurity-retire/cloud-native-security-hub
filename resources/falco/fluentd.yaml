@@ -4,6 +4,7 @@ kind: FalcoRules
 vendor: FluentD
 name: FluentD
 shortDescription: Falco rules for securing FluentD
+version: 1.0.0
 description: |
   # FluentD Falco Rules
 

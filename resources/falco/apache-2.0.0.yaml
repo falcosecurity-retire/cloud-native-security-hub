@@ -1,0 +1,96 @@
+---
+apiVersion: v1
+kind: FalcoRules
+vendor: Apache
+name: Apache
+shortDescription: Falco rules for securing Apache HTTP Server
+version: 2.0.0
+description: |
+  # Apache Falco Rules v2
+  The Apache HTTP Server, colloquially called Apache (/əˈpætʃi/ ə-PATCH-ee),
+  is free and open-source cross-platform web server software, released under the
+  terms of Apache License 2.0. Apache is developed and maintained by an open community
+  of developers under the auspices of the Apache Software Foundation.
+
+  ## Rules
+
+  ### Unexpected inbound TCP connection apache
+
+  Detects inbound traffic to apache using tcp on a port outside of expected set
+
+  Allowed inbound ports:
+
+  * 80
+  * 443
+
+  ### Unexpected spawned process apache
+
+  Detects a process started in a apache container outside of an expected set
+
+  Allowed processes:
+  * apache2
+  * basename
+  * grep
+  * app-entrypoint.
+  * node
+  * sleep
+  * dirname
+  * httpd
+  * nami
+  * sh
+  * tini
+
+  ### Unexpected file access readwrite for apache
+
+  Detects an attempt to access a file readwrite other than below an expected list of directories
+
+  Allowed file prefixes for readwrite:
+  * /opt
+  * /tmp
+  * /dev/null
+keywords:
+  - web
+icon: https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Apache_HTTP_server_logo_%282016%29.svg/300px-Apache_HTTP_server_logo_%282016%29.svg.png
+maintainers:
+  - name: nestorsalceda
+    email: nestor.salceda@sysdig.com
+  - name: fedebarcelona
+    email: fede.barcelona@sysdig.com
+rules:
+  - raw: |
+      - macro: apache_consider_syscalls
+        condition: (evt.num < 0)
+
+      - macro: app_apache
+        condition: container and container.image contains "apache"
+
+      # Restricting listening ports to selected set
+
+      - list: apache_allowed_inbound_ports_tcp
+        items: [80, 443]
+
+      - rule: Unexpected inbound tcp connection apache
+        desc: Detect inbound traffic to apache using tcp on a port outside of expected set
+        condition: inbound and evt.rawres >= 0 and not fd.sport in (apache_allowed_inbound_ports_tcp) and app_apache
+        output: Inbound network connection to apache on unexpected port (command=%proc.cmdline pid=%proc.pid connection=%fd.name sport=%fd.sport user=%user.name %container.info image=%container.image)
+        priority: NOTICE
+
+      # Restricting spawned processes to selected set
+
+      - list: apache_allowed_processes
+        items: ["apache2", "basename", "grep", "app-entrypoint.", "node", "sleep", "dirname", "httpd", "nami", "sh", "tini"]
+
+      - rule: Unexpected spawned process apache
+        desc: Detect a process started in a apache container outside of an expected set
+        condition: spawned_process and not proc.name in (apache_allowed_processes) and app_apache
+        output: Unexpected process spawned in apache container (command=%proc.cmdline pid=%proc.pid user=%user.name %container.info image=%container.image)
+        priority: NOTICE
+
+      - list: apache_allowed_file_prefixes_readwrite
+        items: ["/opt", "/tmp", "/dev/null"]
+
+      - rule: Unexpected file access readwrite for apache
+        desc: Detect an attempt to access a file readwrite other than below an expected list of directories
+        condition: (open_write) and not fd.name pmatch (apache_allowed_file_prefixes_readwrite) and app_apache
+        output: Unexpected file accessed readwrite for apache (command=%proc.cmdline pid=%proc.pid file=%fd.name %container.info image=%container.image)
+        priority: NOTICE

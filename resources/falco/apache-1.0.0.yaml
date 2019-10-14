@@ -4,8 +4,9 @@ kind: FalcoRules
 vendor: Apache
 name: Apache
 shortDescription: Falco rules for securing Apache HTTP Server
+version: 1.0.0
 description: |
-  # Apache Falco Rules
+  # Apache Falco Rules v1
   The Apache HTTP Server, colloquially called Apache (/əˈpætʃi/ ə-PATCH-ee),
   is free and open-source cross-platform web server software, released under the
   terms of Apache License 2.0. Apache is developed and maintained by an open community

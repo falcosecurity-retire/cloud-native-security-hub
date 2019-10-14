@@ -4,6 +4,7 @@ kind: FalcoRules
 vendor: Consul
 name: Consul
 shortDescription: Falco rules for securing Consul
+version: 1.0.0
 description: |
   # Consul Falco Rules
 

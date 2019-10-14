@@ -4,6 +4,7 @@ kind: FalcoRules
 vendor: Traefik
 name: Traefik
 shortDescription: Falco rules for securing Traefik
+version: 1.0.0
 description: |
   # Traefik Falco Rules
 
