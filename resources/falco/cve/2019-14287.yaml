@@ -1,0 +1,35 @@
+---
+apiVersion: v1
+kind: FalcoRules
+name: CVE-2019-14287
+shortDescription: Falco rules for detecting CVE-2019-14287
+description: |
+  # CVE-2019-14287
+
+  The issue exists in the way sudo has implemented running commands with an arbitrary user ID in versions earlier than 1.8.28. The CVSS v3 score is 7.8, so we are talking about a high severity vulnerability, easy to exploit, although the attack vector is local and requires a non-default configuration.
+
+  Invoking sudo with -u#-1 or -u#4294967295 specified in the sudo command, the malicious user can run arbitrary commands as root, as long as the sudoers meets the previously described conditions.
+
+  In addition to that, the malicious sudo operation will not log correctly through the syslog facility. It supposed to be logged as root, however, it turned out to be -1 or 4294967295.
+
+  You can read more info about this CVE:
+
+  * [CVE-2019-14287 on Mitre](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-14287)
+  * [How to detect CVE-2019-14287 using Falco](https://sysdig.com/blog/detecting-cve-2019-14287/)
+
+keywords:
+  - cve
+icon: https://cve.mitre.org/images/cvebanner.png
+maintainers:
+  - name: nestorsalceda
+    email: nestor.salceda@sysdig.com
+rules:
+  - raw: |
+      - rule: Sudo Potential bypass of Runas user restrictions (CVE-2019-14287)
+        desc: When sudo is configured to allow a user to run commands as an arbitrary user via the ALL keyword in a Runas specification, it is possible to run commands as root by specifying the user ID -1 or 4294967295. This can be used by a user with sufficient sudo privileges to run commands as root even if the Runas specification explicitly disallows root access as long as the ALL keyword is listed first in the Runas specification
+        condition: >
+          spawned_process and
+          proc.name="sudo" and
+          (proc.cmdline contains "-u#-1" or proc.cmdline contains "-u#4294967295")
+        output: "Detect sudo exploit (CVE-2019-14287) (user=%user.name command=%proc.cmdline container=%container.info)"
+        priority: CRITICAL
