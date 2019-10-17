@@ -1,0 +1,20 @@
+---
+apiVersion: v1
+kind: Vendor
+name: Elastic
+description: |
+  # Elastic
+
+  Elastic is a company founded in 2012 in Amsterdam, the Netherlands, previously known as Elasticsearch.
+
+  They build self-managed and SaaS offerings for search, logging, security and analytics use cases.
+  They offer solutions like Elasticsearch, Kibana, Beats and Logstash, previously known as the ELK Stack,
+  with free and paid proprietary features.
+
+  Their opensource search technology is used by eBay, Wikipedia, Yelp Uber, Lyft, Tinder and Netflix.
+
+  Elastic is also implemented in use cases such as application search, site search, enterprise search, logging,
+  infrastructure monitoring, aplication performance management, security analytics and business analytics.
+
+icon: https://upload.wikimedia.org/wikipedia/en/3/3b/Elastic_NV_logo.png
+website: https://www.elastic.co/

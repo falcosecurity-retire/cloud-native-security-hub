@@ -1,0 +1,11 @@
+---
+apiVersion: v1
+kind: Vendor
+name: Rook
+description: |
+  # Rook 
+
+  Rook turns distributed storage systems into self-managing, self-scaling, self-healing storage services. It automates the tasks of a storage administrator: deployment, bootstrapping, configuration, provisioning, scaling, upgrading, migration, disaster recovery, monitoring, and resource management.
+
+icon: https://www.pngfind.com/pngs/m/581-5811204_rook-kubernetes-logo-hd-png-download.png
+website: https://rook.io/

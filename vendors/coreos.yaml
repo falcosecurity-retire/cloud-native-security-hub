@@ -1,0 +1,13 @@
+---
+apiVersion: v1
+kind: Vendor
+name: CoreOS
+description: |
+  # CoreOS
+  
+  CoreOS is a company that offers open-source applications and the Container Linux OS based on the Linux kernel and designing for providing infrastructure to clustered deployments, while focusing on automation, security and scalability.
+
+  They maintain applications like Operator frameworks, rkt, etcd, Clair, flannel, Quay, Tectonic...
+
+icon: https://coreos.com/assets/images/brand/coreos-wordmark-horiz-color.svg
+website: https://coreos.com/
