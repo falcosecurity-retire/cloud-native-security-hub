@@ -55,9 +55,9 @@ keywords:
 icon: https://www.cncf.io/wp-content/uploads/2018/04/HAProxy-logo.png
 maintainers:
   - name: nestorsalceda
-    email: nestor.salceda@sysdig.com
+    link: github.com/nestorsalceda
   - name: fedebarcelona
-    email: fede.barcelona@sysdig.com
+    link: github.com/tembleking
 rules:
   - raw: |
       - macro: haproxy_consider_syscalls
