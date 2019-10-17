@@ -1,0 +1,11 @@
+---
+apiVersion: v1
+kind: Vendor
+name: Treasure Data
+description: |
+  # Treasure Data
+
+  Treasure Data develops a cloud data management platform and are the creators of FluentD, Fluent Bit, Embulk, Apache Hivemall, Message Pack, Digdag and many other projects.
+  
+icon: https://www.treasuredata.com/wp-content/uploads/arm-treasure-data-logo.svg
+website: https://www.treasuredata.com

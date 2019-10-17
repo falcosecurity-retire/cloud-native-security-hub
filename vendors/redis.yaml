@@ -1,0 +1,14 @@
+---
+apiVersion: v1
+kind: Vendor
+name: Redis Labs
+description: |
+    # Redis Labs
+    
+    Redis labs, founded in 2011 and originally called Garantia Data, is a private computer software company based in Mountain View, California, and provides a open source NoSQL database used as a service in cloud computing.
+
+    They maintain the Redis database while providing support to Redis Enterprise Software, Redist Enterprise VPC and a cloud computing service known as Redis Enterprise Cloud.
+
+
+icon: https://upload.wikimedia.org/wikipedia/en/6/6b/Redis_Logo.svg
+website: https://redis.io/

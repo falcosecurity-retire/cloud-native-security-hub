@@ -1,0 +1,13 @@
+---
+apiVersion: v1
+kind: Vendor
+name: Nginx
+description: |
+  # Nginx
+  
+  Nginx was founded in July 2011 to provide commercial products and support for the Nginx software originally developed by Sysoev, which was developed to solve the C10k problem.
+
+  They offer commercial support options for companies using Nginx in production and services to assist customers in custom configuration or adding additional features. 
+
+icon: https://upload.wikimedia.org/wikipedia/commons/c/c5/Nginx_logo.svg
+website: https://nginx.org/

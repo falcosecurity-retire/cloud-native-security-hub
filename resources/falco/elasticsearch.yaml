@@ -1,7 +1,7 @@
 ---
 apiVersion: v1
 kind: FalcoRules
-vendor: ElasticSearch
+vendor: Elastic
 name: ElasticSearch
 shortDescription: Falco rules for securing ElasticSearch
 description: |

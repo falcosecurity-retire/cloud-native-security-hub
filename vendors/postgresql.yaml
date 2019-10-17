@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Vendor
+name: PostgreSQL
+description: |
+  # PostgreSQL Global Development Group
+
+  Diverse group of many companies and individual contributors.
+
+  Originally named POSTGRES refers to the project's origins in that RDBMS that originated at University of California, Berkeley.
+
+  Supports replication, indexes, schemas, multiple data types, user-defined objects inheritance, referential integrity, binary and textual large-object storage, tablespaces, online backup, point-in-time recovery, etc.
+
+icon: https://upload.wikimedia.org/wikipedia/commons/2/29/Postgresql_elephant.svg
+website: https://www.postgresql.org/

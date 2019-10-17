@@ -1,0 +1,16 @@
+---
+apiVersion: v1
+kind: Vendor
+name: HashiCorp
+description: |
+  # HashiCorp
+
+  HashiCorp is a software company with a Freemium business model based in San Francisco, California. 
+  
+  HashiCorp provides open-source tools and commercial products that enable developers, operators and security professionals to provision, secure, run and connect cloud-computing infrastructure.
+  It was founded in 2012 by Mitchell Hashimoto and Armon Dadgar. 
+
+  HashiCorp offers both opensource and proprietary products.
+
+icon: https://upload.wikimedia.org/wikipedia/commons/8/80/HashiCorp_Logo_no_text.png
+website: https://www.hashicorp.com/

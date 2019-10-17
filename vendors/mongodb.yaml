@@ -5,6 +5,12 @@ name: MongoDB
 description: |
   # MongoDB
 
-  MongoDB is a general purpose, document-based, distributed database built for modern application developers and for the cloud era. No database is more productive to use.
-icon: https://upload.wikimedia.org/wikipedia/en/thumb/4/45/MongoDB-Logo.svg/640px-MongoDB-Logo.svg.png
-website: https://mongodb.com/
+  Is an American software company that develops and provides commercial support for the open source database MongoDB.
+
+  The company was established in 2007 as 10gen in New York City, and began to develop a document-oriented database system they called MongoDB.
+  On August 2013 10gen changed its name to MongoDB Inc.
+
+  They maintain products like MongoDB, MongoDB Atlas, MongoDB Stitch, MongoDB Enterprise, Ops Manager Cloud Manager and MongoDB Compass.
+
+icon: https://upload.wikimedia.org/wikipedia/en/4/45/MongoDB-Logo.svg
+website: https://www.mongodb.com/
