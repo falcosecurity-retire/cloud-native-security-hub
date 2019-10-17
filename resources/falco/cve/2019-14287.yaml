@@ -22,7 +22,7 @@ keywords:
 icon: https://cve.mitre.org/images/cvebanner.png
 maintainers:
   - name: nestorsalceda
-    email: nestor.salceda@sysdig.com
+    link: github.com/nestorsalceda
 rules:
   - raw: |
       - rule: Sudo Potential bypass of Runas user restrictions (CVE-2019-14287)

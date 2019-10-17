@@ -63,9 +63,9 @@ keywords:
 icon: https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Postgresql_elephant.svg/540px-Postgresql_elephant.svg.png
 maintainers:
   - name: nestorsalceda
-    email: nestor.salceda@sysdig.com
+    link: github.com/nestorsalceda
   - name: fedebarcelona
-    email: fede.barcelona@sysdig.com
+    link: github.com/tembleking
 rules:
   - raw: |
       - macro: postgres_consider_syscalls

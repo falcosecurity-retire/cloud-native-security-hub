@@ -70,9 +70,9 @@ keywords:
 icon: https://raw.githubusercontent.com/cncf/artwork/master/projects/etcd/horizontal/color/etcd-horizontal-color.png
 maintainers:
   - name: nestorsalceda
-    email: nestor.salceda@sysdig.com
+    link: github.com/nestorsalceda
   - name: fedebarcelona
-    email: fede.barcelona@sysdig.com
+    link: github.com/tembleking
 rules:
   - raw: |
       - macro: etcd_consider_syscalls

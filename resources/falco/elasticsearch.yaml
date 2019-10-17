@@ -83,9 +83,9 @@ keywords:
 icon: https://static-www.elastic.co/v3/assets/bltefdd0b53724fa2ce/blt05047fdbe3b9c333/5c11ec1f3312ce2e785d9c30/logo-elastic-elasticsearch-lt.svg
 maintainers:
   - name: nestorsalceda
-    email: nestor.salceda@sysdig.com
+    link: github.com/nestorsalceda
   - name: fedebarcelona
-    email: fede.barcelona@sysdig.com
+    link: github.com/tembleking
 rules:
   - raw: |
       - macro: elasticsearch_consider_syscalls

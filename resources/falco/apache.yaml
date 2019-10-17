@@ -52,9 +52,9 @@ keywords:
 icon: https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Apache_HTTP_server_logo_%282016%29.svg/300px-Apache_HTTP_server_logo_%282016%29.svg.png
 maintainers:
   - name: nestorsalceda
-    email: nestor.salceda@sysdig.com
+    link: github.com/nestorsalceda
   - name: fedebarcelona
-    email: fede.barcelona@sysdig.com
+    link: github.com/tembleking
 rules:
   - raw: |
       - macro: apache_consider_syscalls
