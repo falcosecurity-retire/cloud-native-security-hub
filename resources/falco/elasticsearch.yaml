@@ -83,9 +83,9 @@ keywords:
 icon: https://static-www.elastic.co/v3/assets/bltefdd0b53724fa2ce/blt05047fdbe3b9c333/5c11ec1f3312ce2e785d9c30/logo-elastic-elasticsearch-lt.svg
 maintainers:
   - name: nestorsalceda
-    link: github.com/nestorsalceda
+    link: https://github.com/nestorsalceda
   - name: fedebarcelona
-    link: github.com/tembleking
+    link: https://github.com/tembleking
 rules:
   - raw: |
       - macro: elasticsearch_consider_syscalls

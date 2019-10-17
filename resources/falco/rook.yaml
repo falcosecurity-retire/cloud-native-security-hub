@@ -72,9 +72,9 @@ keywords:
 icon: https://www.pngfind.com/pngs/m/581-5811204_rook-kubernetes-logo-hd-png-download.png
 maintainers:
   - name: nestorsalceda
-    link: github.com/nestorsalceda
+    link: https://github.com/nestorsalceda
   - name: fedebarcelona
-    link: github.com/tembleking
+    link: https://github.com/tembleking
 rules:
   - raw: |
       - macro: rook_consider_syscalls

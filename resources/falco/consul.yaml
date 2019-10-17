@@ -77,9 +77,9 @@ keywords:
 icon: https://s3.amazonaws.com/hashicorp-marketing-web-assets/brand/Consul_PrimaryLogo_FullColor.BkqqyRBpl.svg
 maintainers:
   - name: nestorsalceda
-    link: github.com/nestorsalceda
+    link: https://github.com/nestorsalceda
   - name: fedebarcelona
-    link: github.com/tembleking
+    link: https://github.com/tembleking
 rules:
   - raw: |
       - macro: consul_consider_syscalls

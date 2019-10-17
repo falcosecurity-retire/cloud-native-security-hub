@@ -49,9 +49,9 @@ keywords:
 icon: https://raw.githubusercontent.com/fluent/fluentd-docs/master/public/logo/Fluentd_square.png
 maintainers:
   - name: nestorsalceda
-    link: github.com/nestorsalceda
+    link: https://github.com/nestorsalceda
   - name: fedebarcelona
-    link: github.com/tembleking
+    link: https://github.com/tembleking
 rules:
   - raw: |
       - macro: fluentd_consider_syscalls
