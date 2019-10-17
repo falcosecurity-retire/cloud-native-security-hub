@@ -11,9 +11,9 @@ description: |
 
   ## Rules
 
-  ### Unauthorized inbound tcp connection etcd
+  ### Unauthorized inbound tcp connection traefik
 
-  Detects inbound network connections to etcd on unexpected ports
+  Detects inbound network connections to traefik on unexpected ports
 
   Allowed ports:
 
@@ -21,9 +21,9 @@ description: |
   * 80
   * 8080
 
-  ### Unexpected spawned process etcd
+  ### Unexpected spawned process traefik
 
-  Detects an unexpected process spawned in the etcd container
+  Detects an unexpected process spawned in the traefik container
 
   Allowed processes:
 
