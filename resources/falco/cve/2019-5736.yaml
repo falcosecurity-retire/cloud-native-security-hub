@@ -1,0 +1,38 @@
+---
+apiVersion: v1
+kind: FalcoRules
+name: CVE-2019-5736
+shortDescription: Falco rules for detecting CVE-2019-5736
+description: |
+  # CVE-2019-5736
+
+  runC is the underlying container runtime beneath infrastructure such as Docker, CRI-O, containerd, Kubernetes and others. This new vulnerability allows a compromised container to overwrite the host runC binary and gain root-level execution and underlying file access. As a result, an attacker can run any root level command within a container when:
+  * Spinning up a new container based on the attacker’s image.
+  * Attaching (docker exec) into an existing container which the attacker had previous write access to.
+
+  You can read more info about this CVE:
+
+  * [CVE-2019-5736 on Mitre](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-5736)
+  * [Detecting exploits of CVE-2019-5736: runc container breakout](https://sysdig.com/blog/cve-2019-5736-runc-container-breakout/)
+
+keywords:
+  - cve
+icon: https://cve.mitre.org/images/cvebanner.png
+maintainers:
+  - name: bencer
+    link: https://github.com/bencer
+rules:
+  - raw: |
+      - list: docker_binaries
+        items: [dockerd, containerd-shim, "runc:[1:CHILD]"]
+      
+      - macro: docker_procs
+        condition: proc.name in (docker_binaries)
+      
+      - rule: Modify container entrypoint (CVE-2019-5736)
+        desc: Detect file write activities on container entrypoint symlink (/proc/self/exe)
+        condition: >
+          open_write and (fd.name=/proc/self/exe or fd.name startswith /proc/self/fd/) and not docker_procs and container
+        output: >
+          %fd.name is open to write by process (%proc.name, %proc.exeline)
+        priority: WARNING
