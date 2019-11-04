@@ -4,6 +4,7 @@ kind: FalcoRules
 vendor: Apache
 name: Apache
 shortDescription: Falco rules for securing Apache HTTP Server
+version: 1.0.0
 description: |
   # Apache Falco Rules
   The Apache HTTP Server, colloquially called Apache (/əˈpætʃi/ ə-PATCH-ee),
@@ -52,9 +53,9 @@ keywords:
 icon: https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Apache_HTTP_server_logo_%282016%29.svg/300px-Apache_HTTP_server_logo_%282016%29.svg.png
 maintainers:
   - name: nestorsalceda
-    link: https://github.com/nestorsalceda
+    email: nestor.salceda@sysdig.com
   - name: fedebarcelona
-    link: https://github.com/tembleking
+    email: fede.barcelona@sysdig.com
 rules:
   - raw: |
       - macro: apache_consider_syscalls

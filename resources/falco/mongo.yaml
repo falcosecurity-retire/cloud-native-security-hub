@@ -4,6 +4,7 @@ kind: FalcoRules
 vendor: MongoDB
 name: MongoDB
 shortDescription: Falco rules for securing MongoDB
+version: 1.0.0
 description: |
   # MongoDB Falco Rules
   MongoDB is a free and open-source cross-platform document-oriented database program.
