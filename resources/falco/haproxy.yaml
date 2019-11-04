@@ -4,6 +4,7 @@ kind: FalcoRules
 vendor: HAProxy
 name: HAProxy
 shortDescription: Falco rules for securing HAProxy
+version: 1.0.0
 description: |
   # HAProxy Falco Rules
 

@@ -4,6 +4,7 @@ kind: FalcoRules
 vendor: HashiCorp
 name: Consul
 shortDescription: Falco rules for securing Consul
+version: 1.0.0
 description: |
   # Consul Falco Rules
 

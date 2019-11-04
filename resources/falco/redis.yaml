@@ -4,6 +4,7 @@ kind: FalcoRules
 vendor: Redis Labs
 name: Redis
 shortDescription: Falco rules for securing Redis
+version: 1.0.0
 description: |
   # Redis Falco Rules
 

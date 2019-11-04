@@ -4,6 +4,7 @@ kind: FalcoRules
 vendor: PostgreSQL
 name: PostgreSQL
 shortDescription: Falco rules for securing PostgreSQL
+version: 1.0.0
 description: |
   # PostgreSQL Falco Rules
 
