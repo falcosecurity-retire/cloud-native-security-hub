@@ -3,6 +3,7 @@ apiVersion: v1
 kind: FalcoRules
 name: CVE-2019-11246
 shortDescription: Falco rules for detecting CVE-2019-11246
+version: 1.0.0
 description: |
   # CVE-2019-11246
 
