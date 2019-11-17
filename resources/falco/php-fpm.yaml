@@ -1,0 +1,138 @@
+---
+apiVersion: v1
+kind: FalcoRules
+vendor: PHP
+name: PHP-FPM
+shortDescription: Falco rules for securing PHP-FPM
+version: 1.0.0
+description: |
+  # PHP-FPM Falco Rules
+
+  PHP-FPM (FastCGI Process Manager) is an alternative PHP FastCGI implementation with some additional features useful for sites of any size, especially busier sites.
+
+  These features include:
+  - Adaptive process spawning
+  - Basic statistics (ala Apache's mod_status)
+  - Advanced process management with graceful stop/start
+  - Ability to start workers with different uid/gid/chroot/environment and different php.ini (replaces safe_mode)
+  - Stdout & stderr logging
+  - Emergency restart in case of accidental opcode cache destruction
+  - Accelerated upload support
+  - Support for a "slowlog"
+  - Enhancements to FastCGI, such as fastcgi_finish_request() - a special function to finish request & flush all data while continuing to do something time-consuming (video converting, stats processing, etc.)
+
+  ... and much more.
+
+  ## Rules
+
+  ### Unexpected inbound connection php_fpm
+
+  Detects any inbound connection arriving at php_fpm
+
+  ### Unexpected inbound tcp connection php_fpm
+
+  Detects inbound traffic to php_fpm using tcp on a port outside of expected set
+
+  Allowed inbound ports:
+
+  * 80
+  * 443
+
+  ### Unexpected spawned process php_fpm
+
+  Detects a process started in a php_fpm container outside of an expected set
+
+  Allowed processes:
+
+  * /usr/bin/python2
+  * nginx
+  * nginx: master process /usr/sbin/nginx -g daemon off; error_log /dev/stderr info
+  * nginx: worker process
+  * php-fpm
+  * php-fpm: pool www
+
+  ### Unexpected file access readonly for php_fpm
+
+  Detects an attempt to access a file readonly other than below an expected list of directories
+
+  Allowed file prefixes for readonly:
+
+  * /dev
+  * /var/www/errors
+
+  ### Unexpected file access readwrite for php_fpm
+
+  Detects an attempt to access a file readwrite other than below an expected list of directories
+
+  Allowed file prefixes for readwrite:
+
+  * /dev
+  * /tmp
+  * /usr/local/var/log
+
+keywords:
+  - web
+icon: https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/PHP-logo.svg/1920px-PHP-logo.svg.png
+
+maintainers:
+  - name: Nestor Salceda
+    link: https://github.com/nestorsalceda
+  - name: Fede Barcelona
+    link: https://github.com/tembleking
+rules:
+  - raw: |
+      - macro: php_fpm_consider_syscalls
+        condition: (evt.num < 0)
+
+      - macro: app_php_fpm
+        condition: container and container.image contains "fpm"
+
+      # Considering any inbound network connection suspect
+      - rule: Unexpected inbound connection php_fpm
+        desc: Detect any inbound connection arriving at php_fpm
+        condition: inbound and evt.rawres >= 0 and app_php_fpm
+        output: Unexpected inbound connection arriving at php_fpm (command=%proc.cmdline pid=%proc.pid connection=%fd.name user=%user.name %container.info image=%container.image)
+        priority: NOTICE
+
+      # Restricting listening ports to selected set
+
+      - list: php_fpm_allowed_inbound_ports_tcp
+        items: [80, 443]
+
+      - rule: Unexpected inbound tcp connection php_fpm
+        desc: Detect inbound traffic to php_fpm using tcp on a port outside of expected set
+        condition: inbound and evt.rawres >= 0 and not fd.sport in (php_fpm_allowed_inbound_ports_tcp) and app_php_fpm
+        output: Inbound network connection to php_fpm on unexpected port (command=%proc.cmdline pid=%proc.pid connection=%fd.name sport=%fd.sport user=%user.name %container.info image=%container.image)
+        priority: NOTICE
+
+      # Restricting spawned processes to selected set
+
+      - list: php_fpm_allowed_processes
+        items: ["/usr/bin/python2", "nginx", "nginx: master process /usr/sbin/nginx -g daemon off; error_log /dev/stderr info;", "nginx: worker process", "php-fpm", "php-fpm: pool www"]
+
+      - rule: Unexpected spawned process php_fpm
+        desc: Detect a process started in a php_fpm container outside of an expected set
+        condition: spawned_process and not proc.name in (php_fpm_allowed_processes) and app_php_fpm
+        output: Unexpected process spawned in php_fpm container (command=%proc.cmdline pid=%proc.pid user=%user.name %container.info image=%container.image)
+        priority: NOTICE
+
+      # Restricting files read or written to specific set
+
+      - list: php_fpm_allowed_file_prefixes_readonly
+        items: ["/dev", "/var/www/errors"]
+
+      - rule: Unexpected file access readonly for php_fpm
+        desc: Detect an attempt to access a file readonly other than below an expected list of directories
+        condition: (open_read and evt.is_open_write=false) and not fd.name pmatch (php_fpm_allowed_file_prefixes_readonly) and app_php_fpm
+        output: Unexpected file accessed readonly for php_fpm (command=%proc.cmdline pid=%proc.pid file=%fd.name %container.info image=%container.image)
+        priority: NOTICE
+
+      - list: php_fpm_allowed_file_prefixes_readwrite
+        items: ["/dev", "/tmp", "/usr/local/var/log"]
+
+      - rule: Unexpected file access readwrite for php_fpm
+        desc: Detect an attempt to access a file readwrite other than below an expected list of directories
+        condition: (open_write) and not fd.name pmatch (php_fpm_allowed_file_prefixes_readwrite) and app_php_fpm
+        output: Unexpected file accessed readwrite for php_fpm (command=%proc.cmdline pid=%proc.pid file=%fd.name %container.info image=%container.image)
+        priority: NOTICE
+

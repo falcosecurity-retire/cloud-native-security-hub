@@ -4,6 +4,7 @@ kind: FalcoRules
 vendor: Apache
 name: Apache
 shortDescription: Falco rules for securing Apache HTTP Server
+version: 1.0.0
 description: |
   # Apache Falco Rules
   The Apache HTTP Server, colloquially called Apache (/əˈpætʃi/ ə-PATCH-ee),

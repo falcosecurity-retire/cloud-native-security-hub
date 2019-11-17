@@ -3,6 +3,7 @@ apiVersion: v1
 kind: FalcoRules
 name: CVE-2019-5736
 shortDescription: Falco rules for detecting CVE-2019-5736
+version: 1.0.0
 description: |
   # CVE-2019-5736
 
@@ -25,10 +26,10 @@ rules:
   - raw: |
       - list: docker_binaries
         items: [dockerd, containerd-shim, "runc:[1:CHILD]"]
-      
+
       - macro: docker_procs
         condition: proc.name in (docker_binaries)
-      
+
       - rule: Modify container entrypoint (CVE-2019-5736)
         desc: Detect file write activities on container entrypoint symlink (/proc/self/exe)
         condition: >

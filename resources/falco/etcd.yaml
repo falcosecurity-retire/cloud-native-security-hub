@@ -4,6 +4,7 @@ kind: FalcoRules
 vendor: CoreOS
 name: etcd
 shortDescription: Falco rules for securing etcd
+version: 1.0.0
 description: |
   # etcd Falco Rules
 
