@@ -28,7 +28,7 @@ description: |
 
 keywords:
   - FIM
-icon:
+icon: https://upload.wikimedia.org/wikipedia/commons/6/65/GNOME_Files_icon_2019.svg
 maintainers:
   - name: bencer
     link: https://github.com/bencer
