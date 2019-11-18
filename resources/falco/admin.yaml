@@ -4,6 +4,7 @@ kind: FalcoRules
 vendor: Sysdig
 name: Admin activities
 shortDescription: Falco rules for detecting admin activities
+version: 1.0.0
 description: |
   # Detecting admin activities Falco Rules
 
@@ -17,7 +18,7 @@ description: |
 
 keywords:
   - usecase
-icon: 
+icon: https://www.sudo.ws/sudo/images/sudo-logo-65.png
 maintainers:
   - name: bencer
     link: https://github.com/bencer
@@ -31,7 +32,7 @@ rules:
         Detected sudo or su privilege escalation activity (user=%user.name command=%proc.cmdline)
       priority: WARN
       tags: [process]
-    - rule: Package Management Launched 
+    - rule: Package Management Launched
       desc: detect package management launched
       condition: >
         spawned_process and user.name != "_apt" and package_mgmt_procs and not package_mgmt_ancestor_procs

@@ -4,6 +4,7 @@ kind: FalcoRules
 vendor: Sysdig
 name: SSH connections
 shortDescription: Falco rules for detecting SSH connections
+version: 1.0.0
 description: |
   # Detecting SSH connections Falco Rules
 
@@ -17,7 +18,7 @@ description: |
 
 keywords:
   - usecase
-icon: 
+icon: https://upload.wikimedia.org/wikipedia/en/thumb/6/65/OpenSSH_logo.png/190px-OpenSSH_log
 maintainers:
   - name: bencer
     link: https://github.com/bencer

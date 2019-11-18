@@ -4,6 +4,7 @@ kind: FalcoRules
 vendor: Sysdig
 name: File integrity monitoring
 shortDescription: Falco rules for file integrity monitoring
+version: 1.0.0
 description: |
   # FIM - File integrity monitoring Falco Rules
 
@@ -27,7 +28,7 @@ description: |
 
 keywords:
   - FIM
-icon: 
+icon:
 maintainers:
   - name: bencer
     link: https://github.com/bencer
