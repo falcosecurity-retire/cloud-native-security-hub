@@ -24,20 +24,20 @@ maintainers:
     link: https://github.com/bencer
 rules:
   - raw: |
-    - rule: Detect su or sudo
-      desc: detect sudo activities
-      condition:
-        spawned_process and proc.name in (sudo, su)
-      output: >
-        Detected sudo or su privilege escalation activity (user=%user.name command=%proc.cmdline)
-      priority: WARN
-      tags: [process]
-    - rule: Package Management Launched
-      desc: detect package management launched
-      condition: >
-        spawned_process and user.name != "_apt" and package_mgmt_procs and not package_mgmt_ancestor_procs
-      output: >
-        Package management process launched in container (user=%user.name
-        command=%proc.cmdline container_id=%container.id container_name=%container.name image=%container.image.repository:%container.image.tag)
-      priority: ERROR
-      tags: [process]
+      - rule: Detect su or sudo
+        desc: detect sudo activities
+        condition:
+          spawned_process and proc.name in (sudo, su)
+        output: >
+          Detected sudo or su privilege escalation activity (user=%user.name command=%proc.cmdline)
+        priority: WARN
+        tags: [process]
+      - rule: Package Management Launched
+        desc: detect package management launched
+        condition: >
+          spawned_process and user.name != "_apt" and package_mgmt_procs and not package_mgmt_ancestor_procs
+        output: >
+          Package management process launched in container (user=%user.name
+          command=%proc.cmdline container_id=%container.id container_name=%container.name image=%container.image.repository:%container.image.tag)
+        priority: ERROR
+        tags: [process]

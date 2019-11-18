@@ -18,27 +18,27 @@ description: |
 
 keywords:
   - usecase
-icon: https://upload.wikimedia.org/wikipedia/en/thumb/6/65/OpenSSH_logo.png/190px-OpenSSH_log
+icon: https://upload.wikimedia.org/wikipedia/en/6/65/OpenSSH_logo.png
 maintainers:
   - name: bencer
     link: https://github.com/bencer
 rules:
   - raw: |
-    - rule: Inbound SSH Connection
-      desc: Detect Inbound SSH Connection
-      condition: >
-        (evt.type in (accept,listen) and evt.dir=<) or
-          (evt.type in (recvfrom,recvmsg)) and ssh_port
-      output: >
-        Inbound SSH connection (user=%user.name client_ip=%fd.cip client_port=%fd.cport server_ip=%fd.sip)
-      priority: WARN
-      tags: [network]
-    - rule: Outbound SSH Connection
-      desc: Detect Outbound SSH Connection
-      condition: >
-        (evt.type = connect and evt.dir=<) or
-          (evt.type in (sendto,sendmsg)) and ssh_port
-      output: >
-        Outbound SSH connection (user=%user.name server_ip=%fd.sip server_port=%fd.sport client_ip=%fd.cip)
-      priority: WARN
-      tags: [network]
+      - rule: Inbound SSH Connection
+        desc: Detect Inbound SSH Connection
+        condition: >
+          (evt.type in (accept,listen) and evt.dir=<) or
+            (evt.type in (recvfrom,recvmsg)) and ssh_port
+        output: >
+          Inbound SSH connection (user=%user.name client_ip=%fd.cip client_port=%fd.cport server_ip=%fd.sip)
+        priority: WARN
+        tags: [network]
+      - rule: Outbound SSH Connection
+        desc: Detect Outbound SSH Connection
+        condition: >
+          (evt.type = connect and evt.dir=<) or
+            (evt.type in (sendto,sendmsg)) and ssh_port
+        output: >
+          Outbound SSH connection (user=%user.name server_ip=%fd.sip server_port=%fd.sport client_ip=%fd.cip)
+        priority: WARN
+        tags: [network]
