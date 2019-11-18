@@ -1,0 +1,43 @@
+---
+apiVersion: v1
+kind: FalcoRules
+vendor: Sysdig
+name: SSH connections
+shortDescription: Falco rules for detecting SSH connections
+description: |
+  # Detecting SSH connections Falco Rules
+
+  A set of rules to detect SSH connections
+
+  ## Rules
+  ### Inbound SSH Connection
+  Detects inbound SSH connection
+  ### Outbound SSH Connection
+  Detects outbound SSH connection
+
+keywords:
+  - usecase
+icon: 
+maintainers:
+  - name: bencer
+    link: https://github.com/bencer
+rules:
+  - raw: |
+    - rule: Inbound SSH Connection
+      desc: Detect Inbound SSH Connection
+      condition: >
+        (evt.type in (accept,listen) and evt.dir=<) or
+          (evt.type in (recvfrom,recvmsg)) and ssh_port
+      output: >
+        Inbound SSH connection (user=%user.name client_ip=%fd.cip client_port=%fd.cport server_ip=%fd.sip)
+      priority: WARN
+      tags: [network]
+    - rule: Outbound SSH Connection
+      desc: Detect Outbound SSH Connection
+      condition: >
+        (evt.type = connect and evt.dir=<) or
+          (evt.type in (sendto,sendmsg)) and ssh_port
+      output: >
+        Outbound SSH connection (user=%user.name server_ip=%fd.sip server_port=%fd.sport client_ip=%fd.cip)
+      priority: WARN
+      tags: [network]

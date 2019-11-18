@@ -1,0 +1,42 @@
+---
+apiVersion: v1
+kind: FalcoRules
+vendor: Sysdig
+name: Admin activities
+shortDescription: Falco rules for detecting admin activities
+description: |
+  # Detecting admin activities Falco Rules
+
+  A set of rules to detect admin activities
+
+  ## Rules
+  ### Detect su or sudo
+  Detects su or sudo privilege escalation activity
+  ### Package Management Launched
+  Detects when a package management process is launched in a container
+
+keywords:
+  - usecase
+icon: 
+maintainers:
+  - name: bencer
+    link: https://github.com/bencer
+rules:
+  - raw: |
+    - rule: Detect su or sudo
+      desc: detect sudo activities
+      condition:
+        spawned_process and proc.name in (sudo, su)
+      output: >
+        Detected sudo or su privilege escalation activity (user=%user.name command=%proc.cmdline)
+      priority: WARN
+      tags: [process]
+    - rule: Package Management Launched 
+      desc: detect package management launched
+      condition: >
+        spawned_process and user.name != "_apt" and package_mgmt_procs and not package_mgmt_ancestor_procs
+      output: >
+        Package management process launched in container (user=%user.name
+        command=%proc.cmdline container_id=%container.id container_name=%container.name image=%container.image.repository:%container.image.tag)
+      priority: ERROR
+      tags: [process]

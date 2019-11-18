@@ -1,0 +1,97 @@
+---
+apiVersion: v1
+kind: FalcoRules
+vendor: Sysdig
+name: File integrity monitoring
+shortDescription: Falco rules for file integrity monitoring
+description: |
+  # FIM - File integrity monitoring Falco Rules
+
+  A set of rules to detect changes in your filesystem
+
+  ## Rules
+  ### Detect New File
+  Detects when a new file is created
+  ### Detect New Directory
+  Detects when a new directory is created
+  ### Detect File Permission or Ownership Change
+  Detects file permissions or ownership change
+  ### Detect Directory Change
+  Detects directory changes includir mkdir, rmdir, mvdir, mv
+  ### Kernel Module Modification
+  Detects kernel modules changes via modprobe or insmod
+  ### Node Created in Filesystem
+  Detects a node created via mknod
+  ### Listen on a New Port
+  Detects a new port is listening
+
+keywords:
+  - FIM
+icon: 
+maintainers:
+  - name: bencer
+    link: https://github.com/bencer
+rules:
+  - raw: |
+      - rule: Detect New File
+        desc: detect new file created
+        condition: >
+          evt.type = chmod or evt.type = fchmod
+        output: >
+          File below a known directory opened for writing (user=%user.name
+          command=%proc.cmdline file=%fd.name parent=%proc.pname pcmdline=%proc.pcmdline gparent=%proc.aname[2])
+        priority: ERROR
+        tags: [filesystem]
+      - rule: Detect New Directory
+        desc: detect new directory created
+        condition: >
+          mkdir
+        output: >
+          File below a known directory opened for writing (user=%user.name
+          command=%proc.cmdline file=%fd.name parent=%proc.pname pcmdline=%proc.pcmdline gparent=%proc.aname[2])
+        priority: ERROR
+        tags: [filesystem]
+      - rule: Detect File Permission or Ownership Change
+        desc: detect file permission/ownership change
+        condition: >
+          spawned_process and proc.name in (chmod, chown) and proc.args contains "/tmp/"
+        output: >
+          File below a known directory has permission or ownership change (user=%user.name
+          command=%proc.cmdline file=%fd.name parent=%proc.pname pcmdline=%proc.pcmdline gparent=%proc.aname[2])
+        priority: WARN
+        tags: [filesystem]
+      - rule: Detect Directory Change
+        desc: detect directories change
+        condition: >
+          spawned_process and proc.name in (mkdir, rmdir, mvdir, mv)
+        output: >
+          Directory Change in Filesystem (user=%user.name
+          command=%proc.cmdline file=%fd.name parent=%proc.pname pcmdline=%proc.pcmdline gparent=%proc.aname[2])
+        priority: WARN
+        tags: [filesystem]
+      - rule: Kernel Module Modification
+        desc: detect kernel module change
+        condition: >
+          spawned_process and proc.name in (insmod, modprobe)
+        output: >
+          Kernel Module Change (user=%user.name
+          command=%proc.cmdline file=%fd.name parent=%proc.pname pcmdline=%proc.pcmdline gparent=%proc.aname[2] result=%evt.res)
+        priority: WARN
+        tags: [process]
+      - rule: Node Created in Filesystem
+        desc: detect node created in filesystem
+        condition: >
+          spawned_process and proc.name = mknod
+        output: >
+          Node Creation in Filesystem (user=%user.name
+          command=%proc.cmdline file=%fd.name parent=%proc.pname pcmdline=%proc.pcmdline gparent=%proc.aname[2] result=%evt.res)
+        priority: WARN
+        tags: [filesystem]
+      - rule: Listen on New Port
+        desc: Detection a new port is listening
+        condition:
+          evt.type = listen
+        output: >
+          A new port is open to listen (port=%fd.sport ip=%fd.sip)
+        priority: WARN
+        tags: [network]
