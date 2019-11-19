@@ -18,6 +18,7 @@ the repository or the community in any way.
 2. Create a YAML file under `resources/falco` directory to create a Falco rule
 3. You can use an existing YAML file as template and fill out the YAML fields
    with your security resource information
+4. Ensure your security resource is a valid YAML file: `make check` will check all rules
 5. Submit a pull request
 
 *NOTE*: In oder to make reviewing and merging of PRs faster, please submit
