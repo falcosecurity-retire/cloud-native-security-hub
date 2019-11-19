@@ -17,7 +17,7 @@ description: |
   * [Detecting exploits of CVE-2019-5736: runc container breakout](https://sysdig.com/blog/cve-2019-5736-runc-container-breakout/)
 
 keywords:
-  - cve
+  - CVE
 icon: https://cve.mitre.org/images/cvebanner.png
 maintainers:
   - name: bencer

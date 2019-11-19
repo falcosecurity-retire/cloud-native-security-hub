@@ -19,7 +19,7 @@ description: |
   * [How to detect CVE-2019-14287 using Falco](https://sysdig.com/blog/detecting-cve-2019-14287/)
 
 keywords:
-  - cve
+  - CVE
 icon: https://cve.mitre.org/images/cvebanner.png
 maintainers:
   - name: nestorsalceda

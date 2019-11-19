@@ -19,7 +19,7 @@ description: |
   * [How to detect CVE-2019-11246 using Falco](https://sysdig.com/blog/how-to-detect-kubernetes-vulnerability-cve-2019-11246-using-falco/)
 
 keywords:
-  - cve
+  - CVE
 icon: https://cve.mitre.org/images/cvebanner.png
 maintainers:
   - name: Fede Barcelona
