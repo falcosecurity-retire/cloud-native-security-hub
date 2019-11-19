@@ -2,8 +2,8 @@
 
 ![last commit](https://flat.badgen.net/github/last-commit/falcosecurity/cloud-native-security-hub?icon=github) ![licence](https://flat.badgen.net/github/license/falcosecurity/cloud-native-security-hub)
 
-Cloud Native Security Hub is a platform or a hub for discovering and sharing
-rules and configurations for all these cloud native security tools.
+Cloud Native Security Hub is a platform for discovering and sharing rules and
+configurations for cloud native security tools.
 
 This repository contains all the security resources which will be displayed on
 https://securityhub.dev
