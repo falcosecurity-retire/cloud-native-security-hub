@@ -10,20 +10,19 @@ description: |
 
   A set of rules to detect changes in your filesystem
 
-  ## Rules
-  ### Detect New File
+  ## Detect New File
   Detects when a new file is created
-  ### Detect New Directory
+  ## Detect New Directory
   Detects when a new directory is created
-  ### Detect File Permission or Ownership Change
+  ## Detect File Permission or Ownership Change
   Detects file permissions or ownership change
-  ### Detect Directory Change
+  ## Detect Directory Change
   Detects directory changes includir mkdir, rmdir, mvdir, mv
-  ### Kernel Module Modification
+  ## Kernel Module Modification
   Detects kernel modules changes via modprobe or insmod
-  ### Node Created in Filesystem
+  ## Node Created in Filesystem
   Detects a node created via mknod
-  ### Listen on a New Port
+  ## Listen on a New Port
   Detects a new port is listening
 
 keywords:

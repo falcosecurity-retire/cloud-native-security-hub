@@ -10,9 +10,7 @@ description: |
 
   Rook turns distributed storage systems into self-managing, self-scaling, self-healing storage services. It automates the tasks of a storage administrator: deployment, bootstrapping, configuration, provisioning, scaling, upgrading, migration, disaster recovery, monitoring, and resource management.
 
-  ## Rules
-
-  ### Unexpected spawned process Rook
+  ## Unexpected spawned process Rook
 
   Detects an unexpected process spawned in the rook container
 
@@ -28,7 +26,7 @@ description: |
   * ldconfig.real
   * rook
 
-  ### Unexpected file read by Rook
+  ## Unexpected file read by Rook
 
   Detects an attempt to access a file readonly other than below an espected list of paths
 
@@ -36,7 +34,7 @@ description: |
 
   * /
 
-  ### Unexpected file written by Rook
+  ## Unexpected file written by Rook
 
   Detects an attempt to access a file readwrite other than below an espected list of paths
 
@@ -45,7 +43,7 @@ description: |
   * /dev
   * /tmp
 
-  ### Unexpected system calls in Rook container
+  ## Unexpected system calls in Rook container
 
   Detects an unexpected system call executed in rook container
 

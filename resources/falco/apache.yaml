@@ -12,9 +12,7 @@ description: |
   terms of Apache License 2.0. Apache is developed and maintained by an open community
   of developers under the auspices of the Apache Software Foundation.
 
-  ## Rules
-
-  ### Unexpected inbound TCP connection apache
+  ## Unexpected inbound TCP connection apache
 
   Detects inbound traffic to apache using tcp on a port outside of expected set
 
@@ -23,7 +21,7 @@ description: |
   * 80
   * 443
 
-  ### Unexpected spawned process apache
+  ## Unexpected spawned process apache
 
   Detects a process started in a apache container outside of an expected set
 
@@ -40,7 +38,7 @@ description: |
   * sh
   * tini
 
-  ### Unexpected file access readwrite for apache
+  ## Unexpected file access readwrite for apache
 
   Detects an attempt to access a file readwrite other than below an expected list of directories
 

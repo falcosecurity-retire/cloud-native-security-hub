@@ -10,9 +10,7 @@ description: |
 
   A distributed, reliable key-value store for the most critical data of a distributed system
 
-  ## Rules
-
-  ### Unauthorized inbound tcp connection fluentd
+  ## Unauthorized inbound tcp connection fluentd
 
   Detects inbound network connections to fluentd on unexpected ports
 
@@ -20,7 +18,7 @@ description: |
 
   * 31337
 
-  ### Unexpected spawned process fluentd
+  ## Unexpected spawned process fluentd
 
   Detects an unexpected process spawned in the fluentd container
 
@@ -37,7 +35,7 @@ description: |
   * sed
   * stat
 
-  ### Unexpected file read or written by fluentd
+  ## Unexpected file read or written by fluentd
 
   Detects an attempt to access a file readwrite other than below an expected list of paths
 

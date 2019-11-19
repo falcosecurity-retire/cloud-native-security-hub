@@ -10,13 +10,11 @@ description: |
 
   Nginx is a web server which can also be used as a reverse proxy, load balancer, mail proxy and HTTP cache.
 
-  ## Rules
-
-  ### Unauthorized process opened an outbund connection
+  ## Unauthorized process opened an outbund connection
 
   Detects if nginx is trying to open an outbound connection
 
-  ### Unauthorized inbound tcp connection nginx
+  ## Unauthorized inbound tcp connection nginx
 
   Detects inbound network connections to nginx on unexpected ports
 
@@ -27,7 +25,7 @@ description: |
   * 8080
   * 8443
 
-  ### Unexpected spawned process nginx
+  ## Unexpected spawned process nginx
 
   Detects an unexpected process spawned in the nginx container
 
@@ -42,7 +40,7 @@ description: |
   * node
   * tini
 
-  ### Unexpected file read or written by nginx
+  ## Unexpected file read or written by nginx
 
   Detects an attempt to access a file readwrite other than below an espected list of paths
 
@@ -51,7 +49,7 @@ description: |
   * /var/log/nginx
   * /var/run
 
-  ### Unexpected system calls in nginx container
+  ## Unexpected system calls in nginx container
 
   Detects an unexpected system call executed in nginx container
 

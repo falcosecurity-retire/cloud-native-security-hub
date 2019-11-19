@@ -10,10 +10,9 @@ description: |
 
   A set of rules to detect admin activities
 
-  ## Rules
-  ### Detect su or sudo
+  ## Detect su or sudo
   Detects su or sudo privilege escalation activity
-  ### Package Management Launched
+  ## Package Management Launched
   Detects when a package management process is launched in a container
 
 keywords:

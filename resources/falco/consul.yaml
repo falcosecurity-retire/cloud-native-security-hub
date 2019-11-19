@@ -10,9 +10,7 @@ description: |
 
   Consul is a service networking solution to connect and secure services across any runtime platform and public or private cloud
 
-  ## Rules
-
-  ### Unexpected inbound tcp connection consul
+  ## Unexpected inbound tcp connection consul
 
   Detects inbound network connections to consul on unexpected ports
 
@@ -24,7 +22,7 @@ description: |
   * 8500
   * 8600
 
-  ### Unexpected spawned process consul
+  ## Unexpected spawned process consul
 
   Detects an unexpected process spawned in the consul container
 
@@ -39,7 +37,7 @@ description: |
   * seq
   * sleep
 
-  ### Unexpected system calls in consul container
+  ## Unexpected system calls in consul container
 
   Detects an unexpected system call executed in consul container
 
@@ -64,7 +62,7 @@ description: |
   * socket
   * unlinkat
 
-  ### Unexpected file access readwrite for apache
+  ## Unexpected file access readwrite for apache
 
   Detects an attempt to access a file readwrite other than below an expected list of directories
 

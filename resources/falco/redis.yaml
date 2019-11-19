@@ -8,9 +8,7 @@ version: 1.0.0
 description: |
   # Redis Falco Rules
 
-  ## Rules
-
-  ### Unexpected inbound tcp connection redis
+  ## Unexpected inbound tcp connection redis
 
   Detects inbound network connections to redis on unexpected ports
 
@@ -18,7 +16,7 @@ description: |
 
   * 6379
 
-  ### Unexpected spawned process redis
+  ## Unexpected spawned process redis
 
   Detects an unexpected process spawned in the redis container
 
@@ -37,7 +35,7 @@ description: |
   * sed
   * which
 
-  ### Unexpected file written by redis
+  ## Unexpected file written by redis
 
   Detects an attempt to access a file readwrite other than below an espected list of paths
 

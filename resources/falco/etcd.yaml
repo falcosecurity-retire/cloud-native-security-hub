@@ -10,9 +10,7 @@ description: |
 
   A distributed, reliable key-value store for the most critical data of a distributed system
 
-  ## Rules
-
-  ### Unauthorized process opened an outbund connection
+  ## Unauthorized process opened an outbund connection
 
   Detects if an unauthorized process is trying to open an outbound connection
 
@@ -20,7 +18,7 @@ description: |
 
   * etcd
 
-  ### Unauthorized inbound tcp connection etcd
+  ## Unauthorized inbound tcp connection etcd
 
   Detects inbound network connections to etcd on unexpected ports
 
@@ -30,7 +28,7 @@ description: |
   * 4001
   * 7001
 
-  ### Unexpected spawned process etcd
+  ## Unexpected spawned process etcd
 
   Detects an unexpected process spawned in the etcd container
 
@@ -38,7 +36,7 @@ description: |
 
   * /usr/local/bin/etcd
 
-  ### Unexpected file read by etcd
+  ## Unexpected file read by etcd
 
   Detects an attempt to access a file readonly other than below an espected list of paths
 
@@ -47,7 +45,7 @@ description: |
   * /proc/self
   * /var/etcd/data/member
 
-  ### Unexpected file readwrite by etcd
+  ## Unexpected file readwrite by etcd
 
   Detects an attempt to access a file readonly other than below an expected list of paths
 
@@ -55,7 +53,7 @@ description: |
 
   * /var/etcd/data/member
 
-  ### Unexpected system calls in etcd container
+  ## Unexpected system calls in etcd container
 
   Detects an unexpected system call executed in etcd container
 

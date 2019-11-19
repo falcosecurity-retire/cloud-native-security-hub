@@ -11,9 +11,7 @@ description: |
 
   Launched in 2015, Kubernetes Engine builds on Google's experience of running services like Gmail and YouTube in containers for over 12 years. Kubernetes Engine allows you to get up and running with Kubernetes in no time, by completely eliminating the need to install, manage, and operate your own Kubernetes clusters.
 
-  ## Rules
-
-  ### Unexpected inbound TCP connections
+  ## Unexpected inbound TCP connections
 
   Detects inbound traffic to GKE components on a port outside of expected set
 
@@ -23,7 +21,7 @@ description: |
   * 10248, 10249, 10250, 10255, 4194, 443, 8080 TCP (hyperkube container)
   * 53 TCP/UDP (k8s_dns container)
 
-  ### Unexpected spawned processes
+  ## Unexpected spawned processes
 
   Detects a process started in GKE cluster outside of an expected set
 
@@ -46,7 +44,7 @@ description: |
     * /usr/sbin/dnsmasq
     * dnsmasq
 
-  ### Unexpected file access
+  ## Unexpected file access
 
   Detects an attempt to access a file other than an expected list of directories
 

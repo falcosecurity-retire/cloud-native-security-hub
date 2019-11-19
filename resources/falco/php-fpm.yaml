@@ -23,13 +23,11 @@ description: |
 
   ... and much more.
 
-  ## Rules
-
-  ### Unexpected inbound connection php_fpm
+  ## Unexpected inbound connection php_fpm
 
   Detects any inbound connection arriving at php_fpm
 
-  ### Unexpected inbound tcp connection php_fpm
+  ## Unexpected inbound tcp connection php_fpm
 
   Detects inbound traffic to php_fpm using tcp on a port outside of expected set
 
@@ -38,7 +36,7 @@ description: |
   * 80
   * 443
 
-  ### Unexpected spawned process php_fpm
+  ## Unexpected spawned process php_fpm
 
   Detects a process started in a php_fpm container outside of an expected set
 
@@ -51,7 +49,7 @@ description: |
   * php-fpm
   * php-fpm: pool www
 
-  ### Unexpected file access readonly for php_fpm
+  ## Unexpected file access readonly for php_fpm
 
   Detects an attempt to access a file readonly other than below an expected list of directories
 
@@ -60,7 +58,7 @@ description: |
   * /dev
   * /var/www/errors
 
-  ### Unexpected file access readwrite for php_fpm
+  ## Unexpected file access readwrite for php_fpm
 
   Detects an attempt to access a file readwrite other than below an expected list of directories
 

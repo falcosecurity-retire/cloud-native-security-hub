@@ -10,9 +10,7 @@ description: |
 
   A reverse proxy / load balancer that's easy, dynamic, automatic, fast, full-featured, open source, production proven, provides metrics, and integrates with every major cluster technology... No wonder it's so popular!
 
-  ## Rules
-
-  ### Unauthorized inbound tcp connection traefik
+  ## Unauthorized inbound tcp connection traefik
 
   Detects inbound network connections to traefik on unexpected ports
 
@@ -22,7 +20,7 @@ description: |
   * 80
   * 8080
 
-  ### Unexpected spawned process traefik
+  ## Unexpected spawned process traefik
 
   Detects an unexpected process spawned in the traefik container
 

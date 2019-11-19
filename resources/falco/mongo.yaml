@@ -12,9 +12,7 @@ description: |
   MongoDB is developed by MongoDB Inc., and is published under a combination of the GNU
   Affero General Public License and the Apache
 
-  ## Rules
-
-  ### Unexpected inbound tcp connection mongo
+  ## Unexpected inbound tcp connection mongo
 
   Detects an inbound network connection to mongo on an unexpected port
 
@@ -22,7 +20,7 @@ description: |
 
   * 27017
 
-  ### Unexpected spawned process mongo
+  ## Unexpected spawned process mongo
 
   Detects an unexpected process spawned in the mongo container
 
@@ -49,7 +47,7 @@ description: |
   * useradd
   * which
 
-  ### Unexpected file access readwrite for mongo
+  ## Unexpected file access readwrite for mongo
 
   Detects an unexpected file accessed in readwrite mode for mongo
 

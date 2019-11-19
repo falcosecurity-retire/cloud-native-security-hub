@@ -9,9 +9,7 @@ description: |
   # ElasticSearch Falco Rules
   Elasticsearch is a distributed, RESTful search and analytics engine capable of addressing a growing number of use cases. As the heart of the Elastic Stack, it centrally stores your data so you can discover the expected and uncover the unexpected.
 
-  ## Rules
-
-  ### Unexpected inbound tcp connection elasticsearch
+  ## Unexpected inbound tcp connection elasticsearch
 
   Detects inbound network connections to elasticsearch on unexpected ports
 
@@ -25,7 +23,7 @@ description: |
   * 9200
   * 9300
 
-  ### Unexpected spawned process elasticsearch
+  ## Unexpected spawned process elasticsearch
 
   Detects an unexpected process spawned in the elasticsearch container
 
@@ -67,7 +65,7 @@ description: |
   * su
   * tini
 
-  ### Unexpected file access readwrite for elasticsearch
+  ## Unexpected file access readwrite for elasticsearch
 
   Detects an unexpected file accessed in readwrite mode for elasticsearch
 

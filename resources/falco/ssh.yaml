@@ -10,10 +10,9 @@ description: |
 
   A set of rules to detect SSH connections
 
-  ## Rules
-  ### Inbound SSH Connection
+  ## Inbound SSH Connection
   Detects inbound SSH connection
-  ### Outbound SSH Connection
+  ## Outbound SSH Connection
   Detects outbound SSH connection
 
 keywords:

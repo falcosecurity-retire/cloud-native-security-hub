@@ -9,9 +9,7 @@ description: |
   # Kubernetes Falco Rules
   Kubernetes (commonly stylized as k8s) is an open-source container-orchestration system for automating application deployment, scaling, and management.
 
-  ## Rules
-
-  ### Unexpected inbound TCP connections
+  ## Unexpected inbound TCP connections
 
   Detects inbound traffic to Kubernetes components using tcp on a port outside of expected set
 
@@ -22,7 +20,7 @@ description: |
   * 10053, 10055, 8081 (kube-dns container)
   * 10251 (kube-scheduler container)
 
-  ### Unexpected spawned processes
+  ## Unexpected spawned processes
 
   Detects a process started in a kubernetes cluster outside of an expected set
 
@@ -33,7 +31,7 @@ description: |
   * /kube-dns (kube-dns container)
   * kube-scheduler (kube-scheduler container)
 
-  ### Unexpected file access readonly
+  ## Unexpected file access readonly
 
   Detects an attempt to access a file readonly other than below an expected list of directories
 

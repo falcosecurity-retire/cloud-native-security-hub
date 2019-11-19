@@ -8,9 +8,7 @@ version: 1.0.0
 description: |
   # PostgreSQL Falco Rules
 
-  ## Rules
-
-  ### Unexpected inbound tcp connection postgres
+  ## Unexpected inbound tcp connection postgres
 
   Detects inbound network connections to postgres on unexpected ports
 
@@ -18,7 +16,7 @@ description: |
 
   * 5432
 
-  ### Unexpected spawned process postgres
+  ## Unexpected spawned process postgres
 
   Detects an unexpected process spawned in the postgres container
 
@@ -31,7 +29,7 @@ description: |
   * pg_ctl
   * sh
 
-  ### Unexpected file read by postgres
+  ## Unexpected file read by postgres
 
   Detects an attempt to access a file readonly other than below an espected list of paths
 
@@ -50,7 +48,7 @@ description: |
   * /usr/share/postgresql
   * /var/run/postgresql
 
-  ### Unexpected file written by postgres
+  ## Unexpected file written by postgres
 
   Detects an attempt to access a file readwrite other than below an espected list of paths
 
