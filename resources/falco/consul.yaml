@@ -4,7 +4,7 @@ kind: FalcoRules
 vendor: HashiCorp
 name: Consul
 shortDescription: Falco rules for securing Consul
-version: 1.0.0
+version: 1.0.1
 description: |
   # Consul Falco Rules
 
@@ -72,7 +72,8 @@ description: |
   * /var/lib/consul
 
 keywords:
-  - consul
+  - database
+  - DNS
 icon: https://s3.amazonaws.com/hashicorp-marketing-web-assets/brand/Consul_PrimaryLogo_FullColor.BkqqyRBpl.svg
 maintainers:
   - name: nestorsalceda

@@ -4,7 +4,7 @@ kind: FalcoRules
 #vendor: Google
 name: GKE
 shortDescription: Falco rules for securing Google Kubernetes Engine
-version: 1.0.0
+version: 1.0.1
 description: |
   # GKE Falco Rules
   Google Kubernetes Engine (GKE) is a managed, production-ready environment for deploying containerized applications. It brings our latest innovations in developer productivity, resource efficiency, automated operations, and open source flexibility to accelerate your time to market.
@@ -53,7 +53,6 @@ description: |
   * Read outside /etc/k8s/dns or write outside /dev (k8s_dns)
 keywords:
   - kubernetes
-  - google
 icon: https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/Google_Cloud_Logo.svg/300px-Google_Cloud_Logo.svg.png
 maintainers:
   - name: nestorsalceda
