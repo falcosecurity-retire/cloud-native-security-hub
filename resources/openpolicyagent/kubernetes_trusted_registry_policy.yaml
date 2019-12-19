@@ -1,0 +1,32 @@
+---
+apiVersion: v1
+kind: OpenPolicyAgentPolicies
+vendor: Kubernetes
+name: Kubernetes Trusted Registry Images
+shortDescription: Ensure all images running in the Kubernetes cluster comes from a trusted registry
+version: 0.1.0
+description: |
+  # Kubernetes Truested Registry Images
+
+  This is an Open Policy Agent policy which ensures that all images that are
+  going to be run in a cluster comes from a trusted registry.
+
+  All images must come from `docker.io` registry.
+keywords:
+  - kubernetes
+icon: https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Kubernetes_logo_without_workmark.svg/300px-Kubernetes_logo_without_workmark.svg.png
+maintainers:
+  - name: Néstor Salceda
+    link: https://github.com/nestorsalceda
+policies:
+  - raw: |
+      package kubernetes.admission
+
+      deny[msg] {
+          registry := "docker.io/"
+          input.request.kind.kind == "Pod"
+          some i
+          image := input.request.object.spec.containers[i].image
+          not startswith(image, registry)
+          msg := sprintf("image '%v' comes from untrusted registry", [image])
+      }
