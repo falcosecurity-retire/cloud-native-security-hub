@@ -2,11 +2,11 @@
 apiVersion: v1
 kind: OpenPolicyAgentPolicies
 vendor: Kubernetes
-name: Kubernetes Trusted Registry Images
-shortDescription: Ensure all images running in the Kubernetes cluster comes from a trusted registry
+name: Trusted Registry Images
+shortDescription: Open Policy Agent policy for running only images from a trusted repository
 version: 0.1.0
 description: |
-  # Kubernetes Truested Registry Images
+  # Trusted Registry Images
 
   This is an Open Policy Agent policy which ensures that all images that are
   going to be run in a cluster comes from a trusted registry.
