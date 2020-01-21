@@ -4,7 +4,7 @@ kind: FalcoRules
 vendor: Sysdig
 name: File integrity monitoring
 shortDescription: Falco rules for file integrity monitoring
-version: 1.0.0
+version: 1.0.1
 description: |
   # FIM - File integrity monitoring Falco Rules
 
@@ -58,7 +58,7 @@ rules:
         output: >
           File below a known directory has permission or ownership change (user=%user.name
           command=%proc.cmdline file=%fd.name parent=%proc.pname pcmdline=%proc.pcmdline gparent=%proc.aname[2])
-        priority: WARN
+        priority: WARNING
         tags: [filesystem]
       - rule: Detect Directory Change
         desc: detect directories change
@@ -67,7 +67,7 @@ rules:
         output: >
           Directory Change in Filesystem (user=%user.name
           command=%proc.cmdline file=%fd.name parent=%proc.pname pcmdline=%proc.pcmdline gparent=%proc.aname[2])
-        priority: WARN
+        priority: WARNING
         tags: [filesystem]
       - rule: Kernel Module Modification
         desc: detect kernel module change
@@ -76,7 +76,7 @@ rules:
         output: >
           Kernel Module Change (user=%user.name
           command=%proc.cmdline file=%fd.name parent=%proc.pname pcmdline=%proc.pcmdline gparent=%proc.aname[2] result=%evt.res)
-        priority: WARN
+        priority: WARNING
         tags: [process]
       - rule: Node Created in Filesystem
         desc: detect node created in filesystem
@@ -85,7 +85,7 @@ rules:
         output: >
           Node Creation in Filesystem (user=%user.name
           command=%proc.cmdline file=%fd.name parent=%proc.pname pcmdline=%proc.pcmdline gparent=%proc.aname[2] result=%evt.res)
-        priority: WARN
+        priority: WARNING
         tags: [filesystem]
       - rule: Listen on New Port
         desc: Detection a new port is listening
@@ -93,5 +93,5 @@ rules:
           evt.type = listen
         output: >
           A new port is open to listen (port=%fd.sport ip=%fd.sip)
-        priority: WARN
+        priority: WARNING
         tags: [network]
